@@ -1,0 +1,24 @@
+Package: stpphawkes
+Type: Package
+Title: Missing Data for Marked Hawkes process
+Version: 0.2.0
+Date: 2023-03-28
+Authors@R: c(
+    person("J. Derek", "Tucker", email = "jdtuck@sandia.gov", role = "cre"),
+    person("Lyndsay", "Shand", email = "lshand@sandia.gov", role = "aut"),
+    person("Stephen", "Rowe", email = "srowe@sandia.gov", role = "aut"),
+    person("John", "Lewis", email = "jrlewi@sandia.gov", role = "aut"))
+Author: J. Derek Tucker <jdtuck@sandia.gov>
+Maintainer: J. Derek Tucker <jdtuck@sandia.gov>
+Description: Estimation of model parameters for marked Hawkes process.
+    Accounts for missing data in the estimation of the parameters.
+Imports:
+    interp,
+    extraDistr,
+    Rcpp
+License: MIT + file LICENSE
+Encoding: UTF-8
+SystemRequirements: GNU GSL
+NeedsCompilation: yes
+LinkingTo: Rcpp, RcppArmadillo, RcppProgress, RcppGSL
+RoxygenNote: 7.2.3

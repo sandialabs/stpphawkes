@@ -1,0 +1,11 @@
+/.Rproj.user
+*.so
+*.o
+.Rproj.user
+.RData
+.Rhistory
+/.tags
+/.tags1
+.DS_Store
+*.kdev4
+build/
