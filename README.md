@@ -3,7 +3,7 @@ stpphawkes R package
 *R library for spatio-tempoaral hawkes process modeling with missing data*
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/sandialabs/stpphawkes/actions/workflows/r.yaml/badge.svg)](https://github.com/sandialabs/stpphawkes/actions/workflows/r.yaml)
+[![R-CMD-check](https://github.com/sandialabs/stpphawkes/actions/workflows/r.yml/badge.svg)](https://github.com/sandialabs/stpphawkes/actions/workflows/r.yml)
 [![CRAN status](https://www.r-pkg.org/badges/version/stpphawkes)](https://CRAN.R-project.org/package=stpphawkes)
 <!-- badges: end -->
 
