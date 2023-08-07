@@ -1,5 +1,5 @@
 stpphawkes R package
-======================
+====================
 *R library for spatio-tempoaral hawkes process modeling with missing data*
 
 <!-- badges: start -->
