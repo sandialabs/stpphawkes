@@ -1,4 +1,4 @@
-predict.hawkes_t <- function(post_samps, times, evalpt, t_mis=NULL){
+predict_hawkes_t <- function(post_samps, times, evalpt, t_mis=NULL){
   param <- colMeans(post_samps)
 
   if (!is.null(t_mis)){
@@ -13,7 +13,7 @@ predict.hawkes_t <- function(post_samps, times, evalpt, t_mis=NULL){
   return(lambda)
 }
 
-predict.hawkes_st <- function(post_samps, x, y, times, poly, evalpt){
+predict_hawkes_st <- function(post_samps, x, y, times, poly, evalpt){
   param <- colMeans(post_samps)
   lambda <- intensity_stpp(param["mu"], param["a"], param["b"], param["sig"], x, y, times,
                            poly, evalpt)
@@ -21,7 +21,7 @@ predict.hawkes_st <- function(post_samps, x, y, times, poly, evalpt){
   return(lambda)
 }
 
-predict.hawkes_np <- function(obj, x, y, t, v, mu, g) {
+predict_hawkes_np <- function(obj, x, y, t, v, mu, g) {
     term1 <- predict(v, x = t)*predict(mu, x = c(x,y))
     k <- which(obj$t < t)
     k <- k[length(k)]
