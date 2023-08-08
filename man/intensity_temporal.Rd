@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{intensity_temporal}
 \alias{intensity_temporal}
-\title{Calculate intensity function for temporal hawkes}
+\title{Calculate intensity function for temporal Hawkes}
 \usage{
 intensity_temporal(mu, alpha, beta, times, evalpt)
 }
@@ -18,8 +18,8 @@ intensity_temporal(mu, alpha, beta, times, evalpt)
 \item{evalpt}{- point to evaluate}
 }
 \value{
-lambda - intenisty at evalpt
+lambda - intensity at evalpt
 }
 \description{
-Calculate intensity function for temporal hawkes
+Calculate intensity function for temporal Hawkes
 }

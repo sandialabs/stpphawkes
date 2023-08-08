@@ -7,7 +7,7 @@
 simulate_hawkes_stpp(params, poly, t_region, d, history, seed = -1L)
 }
 \arguments{
-\item{params}{- list containg params (\eqn{\mu}, \eqn{a}, \eqn{b}, \eqn{\sigma})}
+\item{params}{- list containing params (\eqn{\mu}, \eqn{a}, \eqn{b}, \eqn{\sigma})}
 
 \item{poly}{- matrix defining polygon (\eqn{N} x \eqn{2})}
 

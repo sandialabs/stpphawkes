@@ -1,7 +1,7 @@
 #' Marked Hawkes Process with Missing Data
 #'
-#' A library for estimation of spatio-temporal hawkes process paramters with
-#' misisng data support
+#' A library for estimation of spatio-temporal Hawkes process parameters with
+#' missing data support
 #'
 #' @name stpphawkes
 #'

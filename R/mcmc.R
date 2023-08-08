@@ -1,7 +1,7 @@
 #' Bayesian Estimation of Temporal Hawkes Model Parameters
 #'
 #' This function computes the posterior of the parameters of a temporal exponential decay Hawkes model
-#' using Metroplis-with-in-Gibbs sampling.
+#' using Metropolis-with-in-Gibbs sampling.
 #'
 #' The default is to estimate the branching structure which is much more computationally efficient. The model will also account to missing data if \code{t_mis} is provided.
 #'
@@ -70,7 +70,7 @@ mcmc_temporal <- function(times, t_max=max(times), t_mis=NULL, param_init=NULL, 
 #' Bayesian Estimation of Temporal Hawkes Model Parameters with Categorical Marks
 #'
 #' This function computes the posterior of the parameters of a temporal exponential decay Hawkes model
-#' using Metroplis-with-in-Gibbs sampling.
+#' using Metropolis-with-in-Gibbs sampling.
 #'
 #' The default is to estimate the branching structure which is much more computationally efficient. The model will also account to missing data if \code{t_mis} is provided.
 #'
@@ -149,7 +149,7 @@ mcmc_temporal_catmark <- function(times, marks, t_max=max(times), t_mis=NULL, pa
 #' Bayesian Estimation of Temporal Hawkes Model Parameters with Categorical Marks
 #'
 #' This function computes the posterior of the parameters of a temporal exponential decay Hawkes model
-#' using Metroplis-with-in-Gibbs sampling.
+#' using Metropolis-with-in-Gibbs sampling.
 #'
 #' The default is to estimate the branching structure which is much more computationally efficient. The model will also account to missing data if \code{t_mis} is provided.
 #'
@@ -236,7 +236,7 @@ mcmc_temporal_contmark <- function(times, marks, wshape,t_max=max(times), t_mis=
 #' Bayesian Estimation of Spatio-Temporal Hawkes Model Parameters
 #'
 #' This function computes the posterior of a spatio-temporal exponential decay Hawkes model
-#' using Metroplis-with-in-Gibbs sampling.
+#' using Metropolis-with-in-Gibbs sampling.
 #'
 #' The default is to estimate the branching structure.
 #' The model will also account to missing data if \code{t_mis} is provided.
@@ -302,7 +302,7 @@ mcmc_stpp <- function(data, poly, t_max=max(data$t), t_mis=NULL, param_init=NULL
 #' Bayesian Estimation of Spatio-Temporal Hawkes Model Parameters with non uniform spatial locations
 #'
 #' This function computes the posterior of a spatio-temporal exponential decay Hawkes model
-#' using Metroplis-with-in-Gibbs sampling.
+#' using Metropolis-with-in-Gibbs sampling.
 #'
 #' The default is to estimate the branching structure.
 #' The model will also account to missing data if \code{t_mis} is provided.

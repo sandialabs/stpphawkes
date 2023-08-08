@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{simulate_temporal}
 \alias{simulate_temporal}
-\title{Simulates a temporal hawkes process with a exponetial correlation function}
+\title{Simulates a temporal Hawkes process with an exponential correlation function}
 \usage{
 simulate_temporal(mu, alpha, beta, tt, times, seed = -1L)
 }
@@ -23,5 +23,8 @@ simulate_temporal(mu, alpha, beta, tt, times, seed = -1L)
 arrivals - vector of arrival times
 }
 \description{
-Simulates a temporal hawkes process with a exponetial correlation function
+Simulates a temporal Hawkes process with an exponential correlation function
+}
+\examples{
+    times = simulate_temporal(.5,.1,.5,c(0,10),numeric())
 }

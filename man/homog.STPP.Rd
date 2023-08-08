@@ -2,7 +2,7 @@
 % Please edit documentation in R/homog_ppp.R
 \name{homog.STPP}
 \alias{homog.STPP}
-\title{Simulate a homogenous space-time poisson process}
+\title{Simulate a homogenous space-time Poisson process}
 \usage{
 homog.STPP(
   mu,
@@ -26,7 +26,7 @@ homog.STPP(
 
 \item{yfrac}{- y fractional increase (default = .1)}
 
-\item{remove}{- remove points outisde polygon (default = F)}
+\item{remove}{- remove points outside polygon (default = F)}
 
 \item{checkpoly}{- check if polygon is proper (default = T)}
 

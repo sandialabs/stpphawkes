@@ -1,4 +1,4 @@
-#' Simulate a homogenous space-time poisson process
+#' Simulate a homogenous space-time Poisson process
 #'
 #' This function simulates a homogenous space-time Poisson process on \eqn{W}, defined by polygon
 #'
@@ -7,7 +7,7 @@
 #' @param t.region - vector of two elements describing time span
 #' @param xfrac - x fractional increase of polygon to handle boundary effects (default = .1)
 #' @param yfrac - y fractional increase (default = .1)
-#' @param remove - remove points outisde polygon (default = F)
+#' @param remove - remove points outside polygon (default = F)
 #' @param checkpoly - check if polygon is proper (default = T)
 #' @param showplot - plot points (default = F)
 #' @return A DataFrame containing \eqn{x},\eqn{y},\eqn{t}

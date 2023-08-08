@@ -6,8 +6,8 @@
 \alias{stpphawkes-package}
 \title{Marked Hawkes Process with Missing Data}
 \description{
-A library for estimation of spatio-temporal hawkes process paramters with
-misisng data support
+A library for estimation of spatio-temporal Hawkes process parameters with
+missing data support
 }
 \references{
 J. D. Tucker, L. Shand, and J. R. Lewis, “Handling Missing Data in Self-Exciting Point Process Models,”

@@ -37,7 +37,7 @@ A DataFrame containing the mcmc samples
 }
 \description{
 This function computes the posterior of the parameters of a temporal exponential decay Hawkes model
-using Metroplis-with-in-Gibbs sampling.
+using Metropolis-with-in-Gibbs sampling.
 }
 \details{
 The default is to estimate the branching structure which is much more computationally efficient. The model will also account to missing data if \code{t_mis} is provided.

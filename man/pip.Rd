@@ -14,7 +14,7 @@ pip(x, y, poly)
 \item{poly}{- matrix defining polygon (\eqn{N} x \eqn{2})}
 }
 \value{
-A list containing the x and y coordiantes of the points inside the polygon
+A list containing the x and y coordinates of the points inside the polygon
  @export
 }
 \description{

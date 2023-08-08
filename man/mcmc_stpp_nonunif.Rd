@@ -40,7 +40,7 @@ A DataFrame containing the mcmc samples
 }
 \description{
 This function computes the posterior of a spatio-temporal exponential decay Hawkes model
-using Metroplis-with-in-Gibbs sampling.
+using Metropolis-with-in-Gibbs sampling.
 }
 \details{
 The default is to estimate the branching structure.

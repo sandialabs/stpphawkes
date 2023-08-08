@@ -97,7 +97,7 @@ ptinpoly <- function(x, y, xp, yp, bb) {
 
 #' Simulate homogenous spatio-temporal hawkes model
 #'
-#' @param params - list containg params (\eqn{\mu}, \eqn{a}, \eqn{b}, \eqn{\sigma})
+#' @param params - list containing params (\eqn{\mu}, \eqn{a}, \eqn{b}, \eqn{\sigma})
 #' @param poly - matrix defining polygon (\eqn{N} x \eqn{2})
 #' @param t_region - vector of two elements describing time region (e.g., c(0,10))
 #' @param d - generate parents on larger polygon by expanded observed polygon by d (default = R::qnorm(.95, 0, sig, 1, 0))
@@ -111,7 +111,7 @@ simulate_hawkes_stpp <- function(params, poly, t_region, d, history, seed = -1L)
 
 #' Simulate inhomogenous spatio-temporal hawkes model
 #'
-#' @param params - list containg params (\eqn{\mu}, \eqn{a}, \eqn{b}, \eqn{\sigma},\eqn{\mu x}, \eqn{\mu y}, \eqn{\sigma x}, \eqn{\sigma y} )
+#' @param params - list containing params (\eqn{\mu}, \eqn{a}, \eqn{b}, \eqn{\sigma},\eqn{\mu x}, \eqn{\mu y}, \eqn{\sigma x}, \eqn{\sigma y} )
 #' @param poly - matrix defining polygon (\eqn{N} x \eqn{2})
 #' @param t_region - vector of two elements describing time region (e.g., c(0,10))
 #' @param d - generate parents on larger polygon by expanded observed polygon by d (default = R::qnorm(.95, 0, sig, 1, 0))
@@ -123,20 +123,20 @@ simulate_hawkes_stpp_nonunif <- function(params, poly, t_region, d, history, see
     .Call('_stpphawkes_simulate_hawkes_stpp_nonunif', PACKAGE = 'stpphawkes', params, poly, t_region, d, history, seed)
 }
 
-#' Calculate intensity function for temporal hawkes
+#' Calculate intensity function for temporal Hawkes
 #'
 #' @param mu - background parameter
 #' @param alpha - alpha parameter
 #' @param beta - beta parameter
 #' @param times - history of previous times
 #' @param evalpt - point to evaluate
-#' @return lambda - intenisty at evalpt
+#' @return lambda - intensity at evalpt
 #' @export
 intensity_temporal <- function(mu, alpha, beta, times, evalpt) {
     .Call('_stpphawkes_intensity_temporal', PACKAGE = 'stpphawkes', mu, alpha, beta, times, evalpt)
 }
 
-#' Simulates a temporal hawkes process with a exponetial correlation function
+#' Simulates a temporal Hawkes process with an exponential correlation function
 #'
 #' @param mu - background parameter
 #' @param alpha - \eqn{\alpha} parameter
@@ -146,6 +146,8 @@ intensity_temporal <- function(mu, alpha, beta, times, evalpt) {
 #' @param seed - value to seed random number generation (default = -1)
 #' @return arrivals - vector of arrival times
 #' @export
+#' @examples 
+#'     times = simulate_temporal(.5,.1,.5,c(0,10),numeric())
 simulate_temporal <- function(mu, alpha, beta, tt, times, seed = -1L) {
     .Call('_stpphawkes_simulate_temporal', PACKAGE = 'stpphawkes', mu, alpha, beta, tt, times, seed)
 }

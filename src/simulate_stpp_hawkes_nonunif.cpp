@@ -10,7 +10,7 @@ using namespace Rcpp;
 
 //' Simulate inhomogenous spatio-temporal hawkes model
 //'
-//' @param params - list containg params (\eqn{\mu}, \eqn{a}, \eqn{b}, \eqn{\sigma},\eqn{\mu x}, \eqn{\mu y}, \eqn{\sigma x}, \eqn{\sigma y} )
+//' @param params - list containing params (\eqn{\mu}, \eqn{a}, \eqn{b}, \eqn{\sigma},\eqn{\mu x}, \eqn{\mu y}, \eqn{\sigma x}, \eqn{\sigma y} )
 //' @param poly - matrix defining polygon (\eqn{N} x \eqn{2})
 //' @param t_region - vector of two elements describing time region (e.g., c(0,10))
 //' @param d - generate parents on larger polygon by expanded observed polygon by d (default = R::qnorm(.95, 0, sig, 1, 0))

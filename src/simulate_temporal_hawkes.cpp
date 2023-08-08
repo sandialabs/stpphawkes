@@ -6,14 +6,14 @@
 
 using namespace Rcpp;
 
-//' Calculate intensity function for temporal hawkes
+//' Calculate intensity function for temporal Hawkes
 //'
 //' @param mu - background parameter
 //' @param alpha - alpha parameter
 //' @param beta - beta parameter
 //' @param times - history of previous times
 //' @param evalpt - point to evaluate
-//' @return lambda - intenisty at evalpt
+//' @return lambda - intensity at evalpt
 //' @export
 // [[Rcpp::export]]
 double intensity_temporal(double mu, double alpha, double beta, arma::vec& times, double evalpt) {
@@ -34,7 +34,7 @@ double intensity_temporal(double mu, double alpha, double beta, arma::vec& times
     return (ci);
 }
 
-//' Simulates a temporal hawkes process with a exponetial correlation function
+//' Simulates a temporal Hawkes process with an exponential correlation function
 //'
 //' @param mu - background parameter
 //' @param alpha - \eqn{\alpha} parameter
@@ -44,6 +44,8 @@ double intensity_temporal(double mu, double alpha, double beta, arma::vec& times
 //' @param seed - value to seed random number generation (default = -1)
 //' @return arrivals - vector of arrival times
 //' @export
+//' @examples 
+//'     times = simulate_temporal(.5,.1,.5,c(0,10),numeric())
 // [[Rcpp::export]]
 arma::vec simulate_temporal(const double mu, double alpha, const double beta, const arma::vec& tt,
                             const arma::vec& times, int seed = -1) {
