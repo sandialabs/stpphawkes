@@ -4,7 +4,7 @@ Title: Missing Data for Marked Hawkes Process
 Version: 0.2.0
 Date: 2023-08-07
 Authors@R: c(
-    person("J. Derek", "Tucker", email = "jdtuck@sandia.gov", role = ("aut","cre"),
+    person("J. Derek", "Tucker", email = "jdtuck@sandia.gov", role = c("aut","cre")),
     person("Lyndsay", "Shand", email = "lshand@sandia.gov", role = "aut"),
     person("Stephen", "Rowe", email = "srowe@sandia.gov", role = "aut"),
     person("John", "Lewis", email = "jrlewi@sandia.gov", role = "aut"))

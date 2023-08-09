@@ -11,6 +11,8 @@
 #' @param checkpoly - check if polygon is proper (default = TRUE)
 #' @param showplot - plot points (default = FALSE)
 #' @return A DataFrame containing \eqn{x},\eqn{y},\eqn{t}
+#' @examples
+#' out = homog.STPP(.5)
 #' @export
 homog.STPP <- function(mu, poly, t.region, xfrac=.1, yfrac=.1, 
                        remove=FALSE, checkpoly=TRUE, showplot=FALSE){
