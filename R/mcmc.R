@@ -16,8 +16,10 @@
 #' @param print - print progress (default = TRUE)
 #' @return A DataFrame containing the mcmc samples
 #' @examples
+#' \dontrun{
 #' times = simulate_temporal(.5,.1,.5,c(0,10),numeric()) 
 #' out = mcmc_temporal(times)
+#' }
 #' @export
 mcmc_temporal <- function(times, t_max=max(times), t_mis=NULL, param_init=NULL, mcmc_param=NULL,
                           branching=TRUE, print=TRUE){
