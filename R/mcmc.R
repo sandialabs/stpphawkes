@@ -25,7 +25,7 @@ mcmc_temporal <- function(times, t_max=max(times), t_mis=NULL, param_init=NULL, 
   }
 
   if (is.null(param_init)){
-    cat("No default value for param_init, use MLE as starting point\n")
+    message("No default value for param_init, use MLE as starting point\n")
     param_init<-temporal.mle(times, t_max, print=FALSE)
   }
 
@@ -104,7 +104,7 @@ mcmc_temporal_catmark <- function(times, marks, t_max=max(times), t_mis=NULL, pa
   }
 
   if (is.null(param_init)){
-    cat("No default value for param_init, use MLE as starting point\n")
+    message("No default value for param_init, use MLE as starting point\n")
     param_init<-temporal.catmark.mle(times, marks, t_max, print=FALSE)
   } else {
     if(!is.scalar(param_init$mu)) {stop('mu_init must be numeric, length 1')}
@@ -186,8 +186,6 @@ mcmc_temporal_contmark <- function(times, marks, wshape,t_max=max(times), t_mis=
 
   if (is.null(param_init)){
     stop("Initial parameters needed")
-    #cat("No default value for param_init, use MLE as starting point\n")
-    #param_init<-temporal.contmark.mle(times, marks, t_max, print=FALSE)
   } else {
     if(!is.scalar(param_init$mu)) {stop('mu_init must be numeric, length 1')}
     if(!is.scalar(param_init$alpha)) {stop('alpha_init must be numeric, length 1')}
@@ -260,7 +258,7 @@ mcmc_stpp <- function(data, poly, t_max=max(data$t), t_mis=NULL, param_init=NULL
   }
 
   if (is.null(param_init)){
-    cat("No default value for param_init, use MLE as starting point\n")
+    message("No default value for param_init, use MLE as starting point\n")
     param_init<-stpp.mle(data, poly, t_max, print=FALSE)
   }
 
@@ -327,7 +325,7 @@ mcmc_stpp_nonunif <- function(data, poly, t_max=max(data$t), t_mis=NULL, param_i
   }
 
   if (is.null(param_init)){
-    cat("No default value for param_init, use MLE as starting point\n")
+    message("No default value for param_init, use MLE as starting point\n")
     param_init<-stpp.mle.nonunif(data, t_max, print=FALSE)
   }
 

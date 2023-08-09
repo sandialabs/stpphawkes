@@ -10,9 +10,9 @@ homog.STPP(
   t.region,
   xfrac = 0.1,
   yfrac = 0.1,
-  remove = F,
-  checkpoly = T,
-  showplot = F
+  remove = FALSE,
+  checkpoly = TRUE,
+  showplot = FALSE
 )
 }
 \arguments{
@@ -26,11 +26,11 @@ homog.STPP(
 
 \item{yfrac}{- y fractional increase (default = .1)}
 
-\item{remove}{- remove points outside polygon (default = F)}
+\item{remove}{- remove points outside polygon (default = FALSE)}
 
-\item{checkpoly}{- check if polygon is proper (default = T)}
+\item{checkpoly}{- check if polygon is proper (default = TRUE)}
 
-\item{showplot}{- plot points (default = F)}
+\item{showplot}{- plot points (default = FALSE)}
 }
 \value{
 A DataFrame containing \eqn{x},\eqn{y},\eqn{t}

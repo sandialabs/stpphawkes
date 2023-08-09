@@ -99,6 +99,8 @@ long2UTM <- function(long) {
 }
 
 plot_trace_1d<-function(post_samps, mu, alpha, beta){
+  oldpar <- par(no.readonly = TRUE)
+  on.exit(par(oldpar))
   par(mfrow=c(3,1))
   plot(post_samps$mu, type='l', ylim=range(c(post_samps$mu, mu)))
   abline(h=mu, col=2, lwd=2)
@@ -106,5 +108,4 @@ plot_trace_1d<-function(post_samps, mu, alpha, beta){
   abline(h=alpha, col=2, lwd=2)
   plot(post_samps$beta, type='l', ylim=range(c(post_samps$beta, beta)))
   abline(h=beta, col=2, lwd=2)
-  par(mfrow=c(1,1))
 }

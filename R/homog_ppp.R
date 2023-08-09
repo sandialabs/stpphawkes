@@ -7,12 +7,13 @@
 #' @param t.region - vector of two elements describing time span
 #' @param xfrac - x fractional increase of polygon to handle boundary effects (default = .1)
 #' @param yfrac - y fractional increase (default = .1)
-#' @param remove - remove points outside polygon (default = F)
-#' @param checkpoly - check if polygon is proper (default = T)
-#' @param showplot - plot points (default = F)
+#' @param remove - remove points outside polygon (default = FALSE)
+#' @param checkpoly - check if polygon is proper (default = TRUE)
+#' @param showplot - plot points (default = FALSE)
 #' @return A DataFrame containing \eqn{x},\eqn{y},\eqn{t}
 #' @export
-homog.STPP <- function(mu, poly, t.region, xfrac=.1, yfrac=.1, remove=F, checkpoly=T, showplot=F){
+homog.STPP <- function(mu, poly, t.region, xfrac=.1, yfrac=.1, 
+                       remove=FALSE, checkpoly=TRUE, showplot=FALSE){
 
   if (checkpoly) {
     xar <- areapl(poly)
