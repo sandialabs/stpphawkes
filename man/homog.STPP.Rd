@@ -38,3 +38,6 @@ A DataFrame containing \eqn{x},\eqn{y},\eqn{t}
 \description{
 This function simulates a homogenous space-time Poisson process on \eqn{W}, defined by polygon
 }
+\examples{
+out = homog.STPP(0.5,matrix(c(0,0,1,1,0,1,1,0),ncol=2),c(0,10))  
+}

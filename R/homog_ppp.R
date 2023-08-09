@@ -12,7 +12,7 @@
 #' @param showplot - plot points (default = FALSE)
 #' @return A DataFrame containing \eqn{x},\eqn{y},\eqn{t}
 #' @examples
-#' out = homog.STPP(.5)
+#' out = homog.STPP(0.5,matrix(c(0,0,1,1,0,1,1,0),ncol=2),c(0,10))  
 #' @export
 homog.STPP <- function(mu, poly, t.region, xfrac=.1, yfrac=.1, 
                        remove=FALSE, checkpoly=TRUE, showplot=FALSE){
