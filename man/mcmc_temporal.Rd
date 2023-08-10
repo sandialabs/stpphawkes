@@ -42,7 +42,7 @@ The default is to estimate the branching structure which is much more computatio
 Branching models specify gamma priors for mu, alpha and beta parameters.
 }
 \examples{
-\dontrun{
+\donttest{
 times = simulate_temporal(.5,.1,.5,c(0,10),numeric()) 
 out = mcmc_temporal(times)
 }

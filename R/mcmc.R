@@ -16,7 +16,7 @@
 #' @param print - print progress (default = TRUE)
 #' @return A DataFrame containing the mcmc samples
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' times = simulate_temporal(.5,.1,.5,c(0,10),numeric()) 
 #' out = mcmc_temporal(times)
 #' }
