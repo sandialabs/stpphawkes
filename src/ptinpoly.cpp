@@ -2,19 +2,6 @@
 #include <RcppArmadillo.h>
 using namespace Rcpp;
 
-/* Copyright Barry Rowlingson <b.rowlingson@lancaster.ac.uk> and
- Peter Diggle (c) 1991-3; http://www.maths.lancs.ac.uk/~rowlings/Splancs/
- R port: copyright 1998-2001 by Roger S. Bivand
-
- This code added June 2001 to cover Rainer Hurling's <rhurlin@gwdg.de>
- concern about points on polygon boundaries - the polygon is rescaled to fit
- within [-1,+1] and boundary hit is set to within +/- 0.000001 at that
- scaling. Scaling code taken from VR/spatial krc.c,  by W. N. Venables
- and B. D. Ripley  Copyright (C) 1994-9. Original C code from Barry
- Rowlingson.
-
- */
-
 static double pxl1, pxu1, pyl1, pyu1, pxl2, pyl2;
 
 //' Calculate if points are in the polynomial
