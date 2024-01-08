@@ -19,5 +19,7 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 SystemRequirements: GNU GSL
 NeedsCompilation: yes
+URL: https://github.com/sandialabs/stpphawkes
+BugReports: https://github.com/sandialabs/stpphawkes/issues
 LinkingTo: Rcpp, RcppArmadillo, RcppProgress, RcppGSL
 RoxygenNote: 7.2.3
