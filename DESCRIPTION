@@ -1,8 +1,8 @@
 Package: stpphawkes
 Type: Package
 Title: Missing Data for Marked Hawkes Process
-Version: 0.2.1
-Date: 2023-08-13
+Version: 0.2.2
+Date: 2025-03-04
 Authors@R: c(
     person("J. Derek", "Tucker", email = "jdtuck@sandia.gov", role = c("aut","cre")),
     person("Lyndsay", "Shand", email = "lshand@sandia.gov", role = "aut"),
