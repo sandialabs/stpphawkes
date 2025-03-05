@@ -1,4 +1,4 @@
-simulate.hawkes.stpp.inhom <- function(mu, params, poly, t.region=NULL, seed=NULL, ...){
+simulate_hawkes_stpp_inhom <- function(mu, params, poly, t.region=NULL, seed=NULL, ...){
   # This simulates event times, called "times", according to a self-exciting
   # point process with paraemters param
 
@@ -130,7 +130,7 @@ simulate.hawkes.stpp.inhom <- function(mu, params, poly, t.region=NULL, seed=NUL
 
 }
 
-simulate.hawkes.stpp.lomax <- function(params, poly, t.region=NULL){
+simulate_hawkes_stpp_lomax <- function(params, poly, t.region=NULL){
   # This simulates event times, called "times", according to a self-exciting
   # point process with paraemters param
   # coords = c(x1, y1, x2, y2)

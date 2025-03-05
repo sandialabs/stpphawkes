@@ -30,7 +30,7 @@ mcmc_temporal(
 \item{print}{- print progress (default = TRUE)}
 }
 \value{
-A DataFrame containing the mcmc samples
+A List containing the mcmc samples (samps), branching structure (y, if TRUE), number of missing points (z), and missing data (zsamps)
 }
 \description{
 This function computes the posterior of the parameters of a temporal exponential decay Hawkes model
@@ -43,7 +43,7 @@ Branching models specify gamma priors for mu, alpha and beta parameters.
 }
 \examples{
 \donttest{
-times = simulate_temporal(.5,.1,.5,c(0,10),numeric()) 
+times = simulate_temporal(.5,.1,.5,c(0,10),numeric())
 out = mcmc_temporal(times)
 }
 }
