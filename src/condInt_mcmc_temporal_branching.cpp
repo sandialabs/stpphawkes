@@ -24,7 +24,7 @@ using namespace Rcpp;
 
 // Bayesian Estimation of Temporal Hawkes Model with Missing Data using branching structure
 // [[Rcpp::export]]
-DataFrame condInt_mcmc_temporal_branching(std::vector<double> ti, double t_maxi, std::vector<int> y_init,
+List condInt_mcmc_temporal_branching(std::vector<double> ti, double t_maxi, std::vector<int> y_init,
                                           double mu_init, double alpha_init, double beta_init,
                                           std::vector<double> mu_parami, std::vector<double> alpha_parami, std::vector<double> beta_parami,
                                           double sig_betai, int n_mcmc, int n_burn, bool print) {
@@ -46,6 +46,7 @@ DataFrame condInt_mcmc_temporal_branching(std::vector<double> ti, double t_maxi,
     arma::vec mu_samps(n_mcmc);
     arma::vec alpha_samps(n_mcmc);
     arma::vec beta_samps(n_mcmc);
+    arma::imat y_samps(y_curr.size(), n_mcmc);
 
     int n = t.size();
     std::vector<double> z;
@@ -54,7 +55,7 @@ DataFrame condInt_mcmc_temporal_branching(std::vector<double> ti, double t_maxi,
     std::vector<int> numtriggered;
     numtriggered.resize(n);
 
-    int numbackground;  
+    int numbackground;
 
     // begin mcmc
     Progress p(n_mcmc, print);
@@ -81,15 +82,19 @@ DataFrame condInt_mcmc_temporal_branching(std::vector<double> ti, double t_maxi,
         mu_samps(iter) = mu_curr;
         alpha_samps(iter) = alpha_curr;
         beta_samps(iter) = beta_curr;
+        y_samps.col(iter) = arma::conv_to<arma::ivec>::from(y_curr);
         p.increment();  // update progress
     }
 
     arma::vec mu_sampso = mu_samps.subvec(n_burn, n_mcmc - 1);
     arma::vec alpha_sampso = alpha_samps.subvec(n_burn, n_mcmc - 1);
     arma::vec beta_sampso = beta_samps.subvec(n_burn, n_mcmc - 1);
+    arma::imat y_sampso = y_samps.cols(n_burn, n_mcmc - 1);
 
     DataFrame df = DataFrame::create(Rcpp::Named("mu") = mu_sampso, Rcpp::Named("alpha") = alpha_sampso,
                                      Rcpp::Named("beta") = beta_sampso);
 
-    return (df);
+    List out = List::create(Named("samps") = df , _["branching"] = y_sampso);
+
+    return (out);
 }
