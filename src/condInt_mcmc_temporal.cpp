@@ -146,7 +146,7 @@ static double sample_beta() {
 
 // Bayesian Estimation of Temporal Hawkes Model with Missing Data
 // [[Rcpp::export]]
-DataFrame condInt_mcmc_temporal(arma::vec ti, double t_maxi, double mu_init, double alpha_init, double beta_init,
+List condInt_mcmc_temporal(arma::vec ti, double t_maxi, double mu_init, double alpha_init, double beta_init,
                                 double sig_mui, double sig_alphai, double sig_betai, int n_mcmc, int n_burn,
                                 bool print) {
     if (t_maxi < 0) {
@@ -187,5 +187,7 @@ DataFrame condInt_mcmc_temporal(arma::vec ti, double t_maxi, double mu_init, dou
     DataFrame df = DataFrame::create(Rcpp::Named("mu") = mu_sampso, Rcpp::Named("alpha") = alpha_sampso,
                                      Rcpp::Named("beta") = beta_sampso);
 
-    return (df);
+    List out = List::create(Named("samps") = df);
+
+    return (out);
 }

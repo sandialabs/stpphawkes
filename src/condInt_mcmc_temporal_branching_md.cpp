@@ -111,7 +111,7 @@ std::vector<std::vector<double>> sample_z(double alpha_curr, double beta_curr, d
         cnt++;
     }
 
-    
+
     return (z_currs);
 }
 
@@ -157,7 +157,7 @@ std::tuple<arma::vec, arma::vec, arma::vec, arma::vec> test_method(
     double alpha_curr = alpha_init;
     double beta_curr = beta_init;
 
-    std::vector<double> t;  
+    std::vector<double> t;
     arma::vec ts = arma::conv_to<arma::vec>::from(t);
 
     // Save ti to dataset
@@ -234,7 +234,7 @@ std::tuple<arma::vec, arma::vec, arma::vec, arma::vec> test_method(
 
 // Bayesian Estimation of Temporal Hawkes Model with Missing Data using branching
 // [[Rcpp::export]]
-DataFrame condInt_mcmc_temporal_branching_md(std::vector<double> ti, arma::mat t_misi, double t_maxi,
+List condInt_mcmc_temporal_branching_md(std::vector<double> ti, arma::mat t_misi, double t_maxi,
                                              std::vector<int> y_init, double mu_init, double alpha_init,
                                              double beta_init, std::vector<double> mu_parami,
                                              std::vector<double> alpha_parami, std::vector<double> beta_parami,
@@ -254,7 +254,7 @@ DataFrame condInt_mcmc_temporal_branching_md(std::vector<double> ti, arma::mat t
     double alpha_curr = alpha_init;
     double beta_curr = beta_init;
 
-    std::vector<double> t;  
+    std::vector<double> t;
 
     arma::vec ts = arma::conv_to<arma::vec>::from(t);
 
@@ -288,6 +288,7 @@ DataFrame condInt_mcmc_temporal_branching_md(std::vector<double> ti, arma::mat t
     arma::vec alpha_samps(n_mcmc);
     arma::vec beta_samps(n_mcmc);
     arma::vec z_samps(n_mcmc);
+    arma::imat y_samps(y_curr.size(), n_mcmc);
 
     int n = t.size();
     std::vector<double> z;
@@ -295,6 +296,7 @@ DataFrame condInt_mcmc_temporal_branching_md(std::vector<double> ti, arma::mat t
 
     // begin mcmc
     Progress p(n_mcmc, print);
+    List z_sampsallo(n_mcmc-n_burn);
     for (int iter = 0; iter < n_mcmc; iter++) {
         if (Progress::check_abort())
             return -1.0;
@@ -320,6 +322,9 @@ DataFrame condInt_mcmc_temporal_branching_md(std::vector<double> ti, arma::mat t
         alpha_samps(iter) = alpha_curr;
         beta_samps(iter) = beta_curr;
         z_samps(iter) = z_curr.size();
+        y_samps.col(iter) = arma::conv_to<arma::ivec>::from(y_curr);
+        if (iter > n_burn)
+          z_sampsallo[iter] = z_curr;
         p.increment();  // update progress
     }
 
@@ -327,9 +332,12 @@ DataFrame condInt_mcmc_temporal_branching_md(std::vector<double> ti, arma::mat t
     arma::vec alpha_sampso = alpha_samps.subvec(n_burn, n_mcmc - 1);
     arma::vec beta_sampso = beta_samps.subvec(n_burn, n_mcmc - 1);
     arma::vec z_sampso = z_samps.subvec(n_burn, n_mcmc - 1);
+    arma::imat y_sampso = y_samps.cols(n_burn, n_mcmc - 1);
 
     DataFrame df = DataFrame::create(Rcpp::Named("mu") = mu_sampso, Rcpp::Named("alpha") = alpha_sampso,
                                      Rcpp::Named("beta") = beta_sampso, Rcpp::Named("z") = z_sampso);
+
+    List out = List::create(Named("samps") = df , _["branching"] = y_sampso, _["zsamps"] = z_sampsallo);
 
     return (df);
 }
