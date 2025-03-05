@@ -13,3 +13,22 @@ missing data support
 J. D. Tucker, L. Shand, and J. R. Lewis, “Handling Missing Data in Self-Exciting Point Process Models,”
   Spatial Statistics, vol. 29. pp. 160-176, 2019.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/sandialabs/stpphawkes}
+  \item Report bugs at \url{https://github.com/sandialabs/stpphawkes/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: J. Derek Tucker \email{jdtuck@sandia.gov}
+
+Authors:
+\itemize{
+  \item Lyndsay Shand \email{lshand@sandia.gov}
+  \item Stephen Rowe \email{srowe@sandia.gov}
+  \item John Lewis \email{jrlewi@sandia.gov}
+}
+
+}
