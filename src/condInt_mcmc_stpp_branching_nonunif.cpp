@@ -73,6 +73,7 @@ List condInt_mcmc_stpp_branching_nonunif(DataFrame data, double t_maxi, std::vec
     arma::vec muy_samps(n_mcmc);
     arma::vec sigx_samps(n_mcmc);
     arma::vec sigy_samps(n_mcmc);
+    arma::imat y_samps(y_curr.size(), n_mcmc);
 
     int n = t.size();
     std::vector<double> z_t;
@@ -136,6 +137,7 @@ List condInt_mcmc_stpp_branching_nonunif(DataFrame data, double t_maxi, std::vec
         muy_samps(iter) = muy_curr;
         sigx_samps(iter) = sigx_curr;
         sigy_samps(iter) = sigy_curr;
+        y_samps.col(iter) = arma::conv_to<arma::ivec>::from(y_curr);
 
         p.increment();  // update progress
     }
@@ -148,11 +150,12 @@ List condInt_mcmc_stpp_branching_nonunif(DataFrame data, double t_maxi, std::vec
     arma::vec muy_sampso = muy_samps.subvec(n_burn, n_mcmc - 1);
     arma::vec sigx_sampso = sigx_samps.subvec(n_burn, n_mcmc - 1);
     arma::vec sigy_sampso = sigy_samps.subvec(n_burn, n_mcmc - 1);
+    arma::imat y_sampso = y_samps.cols(n_burn, n_mcmc - 1);
 
     List df = List::create(Rcpp::Named("mu") = mu_sampso, Rcpp::Named("a") = a_sampso, Rcpp::Named("b") = b_sampso,
                            Rcpp::Named("sigma") = sig_sampso, Rcpp::Named("mux") = mux_sampso,
                            Rcpp::Named("muy") = muy_sampso, Rcpp::Named("sigmax") = sigx_sampso,
-                           Rcpp::Named("sigmay") = sigy_sampso, Rcpp::Named("z") = y_curr);
+                           Rcpp::Named("sigmay") = sigy_sampso, Rcpp::Named("branching") = y_sampso);
 
     return (df);
 }

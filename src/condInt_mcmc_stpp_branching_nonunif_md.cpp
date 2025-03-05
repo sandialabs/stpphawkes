@@ -281,6 +281,11 @@ List condInt_mcmc_stpp_branching_nonunif_md(DataFrame data, arma::mat t_misi, do
 
     // begin mcmc
     Progress p(n_mcmc, print);
+    List z_sampstallo(n_mcmc-n_burn);
+    List z_sampsxallo(n_mcmc-n_burn);
+    List z_sampsyallo(n_mcmc-n_burn);
+    List y_sampso(n_mcmc-n_burn);
+    int cnt_iter = 0;
     for (int iter = 0; iter < n_mcmc; iter++) {
         if (Progress::check_abort()) {
             return -1.0;
@@ -360,6 +365,14 @@ List condInt_mcmc_stpp_branching_nonunif_md(DataFrame data, arma::mat t_misi, do
         muy_samps(iter) = muy_curr;
         sigx_samps(iter) = sigx_curr;
         sigy_samps(iter) = sigy_curr;
+
+        if (iter > n_burn){
+          z_sampstallo[cnt_iter] = z_curr_t_all;
+          z_sampsxallo[cnt_iter] = z_curr_x_all;
+          z_sampsyallo[cnt_iter] = z_curr_y_all;
+          y_sampso[cnt_iter] = y_curr;
+          cnt_iter++;
+        }
 
         p.increment();  // update progress
     }

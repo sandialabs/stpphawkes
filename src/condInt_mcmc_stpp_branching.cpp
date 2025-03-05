@@ -57,6 +57,7 @@ List condInt_mcmc_stpp_branching(DataFrame data, double t_maxi, std::vector<int>
     arma::vec a_samps(n_mcmc);
     arma::vec b_samps(n_mcmc);
     arma::vec sig_samps(n_mcmc);
+    arma::imat y_samps(y_curr.size(), n_mcmc);
 
     int n = t.size();
     std::vector<double> z_t;
@@ -103,6 +104,7 @@ List condInt_mcmc_stpp_branching(DataFrame data, double t_maxi, std::vector<int>
         a_samps(iter) = a_curr;
         b_samps(iter) = b_curr;
         sig_samps(iter) = sig_curr;
+        y_samps.col(iter) = arma::conv_to<arma::ivec>::from(y_curr);
 
         p.increment();  // update progress
     }
@@ -111,9 +113,10 @@ List condInt_mcmc_stpp_branching(DataFrame data, double t_maxi, std::vector<int>
     arma::vec a_sampso = a_samps.subvec(n_burn, n_mcmc - 1);
     arma::vec b_sampso = b_samps.subvec(n_burn, n_mcmc - 1);
     arma::vec sig_sampso = sig_samps.subvec(n_burn, n_mcmc - 1);
+    arma::imat y_sampso = y_samps.cols(n_burn, n_mcmc - 1);
 
     List df = List::create(Rcpp::Named("mu") = mu_sampso, Rcpp::Named("a") = a_sampso, Rcpp::Named("b") = b_sampso,
-                           Rcpp::Named("sigma") = sig_sampso, Rcpp::Named("z") = y_curr);
+                           Rcpp::Named("sigma") = sig_sampso, Rcpp::Named("z") = y_curr, Rcpp::Named("branching") = y_sampso);
 
     return (df);
 }

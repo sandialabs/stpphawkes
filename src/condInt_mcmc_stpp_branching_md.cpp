@@ -257,6 +257,11 @@ List condInt_mcmc_stpp_branching_md(DataFrame data, arma::mat t_misi, double t_m
 
     // begin mcmc
     Progress p(n_mcmc, print);
+    List z_sampstallo(n_mcmc-n_burn);
+    List z_sampsxallo(n_mcmc-n_burn);
+    List z_sampsyallo(n_mcmc-n_burn);
+    List y_sampso(n_mcmc-n_burn);
+    int cnt_iter = 0;
     for (int iter = 0; iter < n_mcmc; iter++) {
         if (Progress::check_abort()) {
             return -1.0;
@@ -314,6 +319,13 @@ List condInt_mcmc_stpp_branching_md(DataFrame data, arma::mat t_misi, double t_m
         b_samps(iter) = b_curr;
         sig_samps(iter) = sig_curr;
         z_samps(iter) = z_curr_t_all.size();
+        if (iter > n_burn){
+          z_sampstallo[cnt_iter] = z_curr_t_all;
+          z_sampsxallo[cnt_iter] = z_curr_x_all;
+          z_sampsyallo[cnt_iter] = z_curr_y_all;
+          y_sampso[cnt_iter] = y_curr;
+          cnt_iter++;
+        }
         p.increment();  // update progress
     }
 
@@ -324,7 +336,9 @@ List condInt_mcmc_stpp_branching_md(DataFrame data, arma::mat t_misi, double t_m
     arma::vec z_sampso = z_samps.subvec(n_burn, n_mcmc - 1);
 
     List df = List::create(Rcpp::Named("mu") = mu_sampso, Rcpp::Named("a") = a_sampso, Rcpp::Named("b") = b_sampso,
-                           Rcpp::Named("sigma") = sig_sampso, Rcpp::Named("z") = z_sampso);
+                           Rcpp::Named("sigma") = sig_sampso, Rcpp::Named("n_missing") = z_sampso,
+                           Rcpp::Named("branching") = y_sampso, Rcpp::Named("z_samps_t") = z_sampstallo,
+                           Rcpp::Named("z_samps_x") = z_sampsxallo, Rcpp::Named("z_samps_y") = z_sampsyallo);
 
     return df;
 }
