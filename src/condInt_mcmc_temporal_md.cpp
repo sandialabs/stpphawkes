@@ -207,6 +207,8 @@ DataFrame condInt_mcmc_temporal_md(arma::vec ti, arma::vec t_misi, double t_maxi
 
     // begin mcmc
     Progress p(n_mcmc, print);
+    List z_sampsallo(n_mcmc-n_burn);
+    int cnt_iter = 0;
     for (int iter = 0; iter < n_mcmc; iter++) {
         if (Progress::check_abort())
             return -1.0;
@@ -228,6 +230,10 @@ DataFrame condInt_mcmc_temporal_md(arma::vec ti, arma::vec t_misi, double t_maxi
         alpha_samps[iter] = alpha_curr;
         beta_samps[iter] = beta_curr;
         n_missing[iter] = z_curr.n_elem;
+        if (iter > n_burn){
+          z_sampsallo[cnt_iter] = z_curr;
+          cnt_iter++;
+        }
         p.increment();  // update progress
     }
     arma::vec mu_sampso = mu_samps.subvec(n_burn, n_mcmc - 1);
@@ -238,5 +244,7 @@ DataFrame condInt_mcmc_temporal_md(arma::vec ti, arma::vec t_misi, double t_maxi
     DataFrame df = DataFrame::create(Rcpp::Named("mu") = mu_sampso, Rcpp::Named("alpha") = alpha_sampso,
                                      Rcpp::Named("beta") = beta_sampso, Rcpp::Named("n_missing") = n_missingo);
 
-    return (df);
+    List out = List::create(Named("samps") = df, _["zsamps"] = z_sampsallo);
+
+    return (out);
 }

@@ -22,18 +22,19 @@ mcmc_temporal_catmark(
 
 \item{t_max}{- maximum time value (default = max(times))}
 
-\item{t_mis}{- mx2 matrix, mth row contains two elements describing the mth missing time range (default = NULL)}
+\item{t_mis}{- \eqn{M}x\eqn{2} matrix, mth row contains two elements describing the mth missing time range (default = `NULL`)}
 
-\item{param_init}{- list of parameters of initial guess (default = NULL, will start with MLE)}
+\item{param_init}{- list of parameters of initial guess (default = `NULL, will start with MLE)}
 
 \item{mcmc_param}{- list of mcmc parameters}
 
-\item{branching}{- using branching structure in estimation (default = TRUE)}
+\item{branching}{- using branching structure in estimation (default = `TRUE`)}
 
-\item{print}{- print progress (default = TRUE)}
+\item{print}{- print progress (default = `TRUE`)}
 }
 \value{
-A DataFrame containing the mcmc samples
+A List containing the mcmc samples (samps), branching structure (`y`, if `TRUE`), and missing data (`zsamps` if `t_mis` is not `NULL`)
+If `t_mis` is not `NULL` the mcmc samples will contain `n_missing`, the number of missing points estimated
 }
 \description{
 This function computes the posterior of the parameters of a temporal exponential decay Hawkes model

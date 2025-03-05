@@ -9,13 +9,13 @@
 #'
 #' @param times - vector of arrival times
 #' @param t_max - maximum time value (default = max(times))
-#' @param t_mis - mx2 matrix, mth row contains two elements describing the mth missing time range (default = NULL)
-#' @param param_init - list of parameters of initial guess (default = NULL, will start with MLE)
+#' @param t_mis - \eqn{M}x\eqn{2} matrix, mth row contains two elements describing the mth missing time range (default = `NULL`)
+#' @param param_init - list of parameters of initial guess (default = `NULL`, will start with MLE)
 #' @param mcmc_param - list of mcmc parameters
-#' @param branching - using branching structure in estimation (default = TRUE)
-#' @param print - print progress (default = TRUE)
-#' @return A List containing the mcmc samples (samps), branching structure (y, if TRUE), and missing data (zsamps if t_mis is not NULL)
-#' If t_mis is not NULL the mcmc samples will contain z, the number of missing points estimated
+#' @param branching - using branching structure in estimation (default = `TRUE`)
+#' @param print - print progress (default = `TRUE`)
+#' @return A List containing the mcmc samples (samps), branching structure (`y`, if `TRUE`), and missing data (`zsamps` if `t_mis` is not `NULL`)
+#' If `t_mis` is not `NULL` the mcmc samples will contain `n_missing`, the number of missing points estimated
 #' @examples
 #' \donttest{
 #' times = simulate_temporal(.5,.1,.5,c(0,10),numeric())
@@ -84,12 +84,13 @@ mcmc_temporal <- function(times, t_max=max(times), t_mis=NULL, param_init=NULL, 
 #' @param times - vector of arrival times
 #' @param marks - vector of marks
 #' @param t_max - maximum time value (default = max(times))
-#' @param t_mis - mx2 matrix, mth row contains two elements describing the mth missing time range (default = NULL)
-#' @param param_init - list of parameters of initial guess (default = NULL, will start with MLE)
+#' @param t_mis - \eqn{M}x\eqn{2} matrix, mth row contains two elements describing the mth missing time range (default = `NULL`)
+#' @param param_init - list of parameters of initial guess (default = `NULL, will start with MLE)
 #' @param mcmc_param - list of mcmc parameters
-#' @param branching - using branching structure in estimation (default = TRUE)
-#' @param print - print progress (default = TRUE)
-#' @return A DataFrame containing the mcmc samples
+#' @param branching - using branching structure in estimation (default = `TRUE`)
+#' @param print - print progress (default = `TRUE`)
+#' @return A List containing the mcmc samples (samps), branching structure (`y`, if `TRUE`), and missing data (`zsamps` if `t_mis` is not `NULL`)
+#' If `t_mis` is not `NULL` the mcmc samples will contain `n_missing`, the number of missing points estimated
 #' @export
 mcmc_temporal_catmark <- function(times, marks, t_max=max(times), t_mis=NULL, param_init=NULL, mcmc_param=NULL,
                           branching=TRUE, print=TRUE){
@@ -164,13 +165,14 @@ mcmc_temporal_catmark <- function(times, marks, t_max=max(times), t_mis=NULL, pa
 #' @param marks - vector of continuous marks
 #' @param wshape - fixed weibull shape parameter
 #' @param t_max - maximum time value (default = max(times))
-#' @param t_mis - mx2 matrix, mth row contains two elements describing the mth missing time range (default = NULL)
-#' @param param_init - list of parameters of initial guess (default = NULL, will start with MLE)
+#' @param t_mis - \eqn{M}x\eqn{2} matrix, mth row contains two elements describing the mth missing time range (default = `NULL`)
+#' @param param_init - list of parameters of initial guess (default = `NULL`, will start with MLE)
 #' @param mcmc_param - list of mcmc parameters
-#' @param branching - using branching structure in estimation (default = TRUE)
+#' @param branching - using branching structure in estimation (default = `TRUE`)
 #' @param dist - distribution for marks string (default = "Weibull")
-#' @param print - print progress (default = TRUE)
-#' @return A DataFrame containing the mcmc samples
+#' @param print - print progress (default = `TRUE`)
+#' @return A List containing the mcmc samples (samps), branching structure (`y`, if `TRUE`), and missing data (`zsamps` if `t_mis` is not `NULL`)
+#' If `t_mis` is not `NULL` the mcmc samples will contain `n_missing`, the number of missing points estimated
 #' @export
 mcmc_temporal_contmark <- function(times, marks, wshape,t_max=max(times), t_mis=NULL, param_init=NULL, mcmc_param=NULL,
                                   branching=TRUE, dist="Weibull",print=TRUE){
@@ -248,13 +250,14 @@ mcmc_temporal_contmark <- function(times, marks, wshape,t_max=max(times), t_mis=
 #' @param data - A DataFrame containing \eqn{x},\eqn{y},\eqn{t}
 #' @param poly - matrix defining polygon (\eqn{N} x \eqn{2})
 #' @param t_max - maximum time value (default = max(times))
-#' @param t_mis - vector of two elements describing missing time range (default = NULL)
-#' @param param_init - list of parameters of initial guess (default = NULL, will start with MLE)
+#' @param t_mis - vector of two elements describing missing time range (default = `NULL`)
+#' @param param_init - list of parameters of initial guess (default = `NULL`, will start with MLE)
 #' @param mcmc_param - list of mcmc parameters
-#' @param branching - using branching structure in estimation (default = TRUE)
-#' @param print - print progress (default = TRUE)
-#' @param sp_clip - when simulating missing data spatial points, clip spatial region back to observed region (default = TRUE)
-#' @return A DataFrame containing the mcmc samples
+#' @param branching - using branching structure in estimation (default = `TRUE`)
+#' @param print - print progress (default = `TRUE`)
+#' @param sp_clip - when simulating missing data spatial points, clip spatial region back to observed region (default = `TRUE`)
+#' @return A List containing the mcmc samples (samps), branching structure (`y`, if `TRUE`), and missing data (`zsamps` if `t_mis` is not `NULL`)
+#' If `t_mis` is not `NULL` the mcmc samples will contain `n_missing`, the number of missing points estimated
 #' @export
 mcmc_stpp <- function(data, poly, t_max=max(data$t), t_mis=NULL, param_init=NULL,mcmc_param=NULL,
                       branching=TRUE, print=TRUE, sp_clip=TRUE){
@@ -314,13 +317,14 @@ mcmc_stpp <- function(data, poly, t_max=max(data$t), t_mis=NULL, param_init=NULL
 #' @param data - A DataFrame containing \eqn{x},\eqn{y},\eqn{t}
 #' @param poly - matrix defining polygon (\eqn{N} x \eqn{2})
 #' @param t_max - maximum time value (default = max(times))
-#' @param t_mis - vector of two elements describing missing time range (default = NULL)
-#' @param param_init - list of parameters of initial guess (default = NULL, will start with MLE)
+#' @param t_mis - vector of two elements describing missing time range (default = `NULL`)
+#' @param param_init - list of parameters of initial guess (default = `NULL`, will start with MLE)
 #' @param mcmc_param - list of mcmc parameters
-#' @param branching - using branching structure in estimation (default = TRUE)
-#' @param print - print progress (default = TRUE)
-#' @param sp_clip - when simulating missing data spatial points, clip spatial region back to observed region (default = TRUE)
-#' @return A DataFrame containing the mcmc samples
+#' @param branching - using branching structure in estimation (default = `TRUE`)
+#' @param print - print progress (default = `TRUE`)
+#' @param sp_clip - when simulating missing data spatial points, clip spatial region back to observed region (default = `TRUE`)
+#' @return A List containing the mcmc samples (samps), branching structure (`y`, if `TRUE`), and missing data (`zsamps` if `t_mis` is not `NULL`)
+#' If `t_mis` is not `NULL` the mcmc samples will contain `n_missing`, the number of missing points estimated
 #' @export
 mcmc_stpp_nonunif <- function(data, poly, t_max=max(data$t), t_mis=NULL, param_init=NULL,mcmc_param=NULL,
                       branching=TRUE, print=TRUE, sp_clip=TRUE){

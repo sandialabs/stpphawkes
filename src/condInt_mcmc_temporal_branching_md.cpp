@@ -288,7 +288,6 @@ List condInt_mcmc_temporal_branching_md(std::vector<double> ti, arma::mat t_misi
     arma::vec alpha_samps(n_mcmc);
     arma::vec beta_samps(n_mcmc);
     arma::vec z_samps(n_mcmc);
-    arma::imat y_samps(y_curr.size(), n_mcmc);
 
     int n = t.size();
     std::vector<double> z;
@@ -297,6 +296,8 @@ List condInt_mcmc_temporal_branching_md(std::vector<double> ti, arma::mat t_misi
     // begin mcmc
     Progress p(n_mcmc, print);
     List z_sampsallo(n_mcmc-n_burn);
+    List y_sampso(n_mcmc-n_burn);
+    int cnt_iter = 0;
     for (int iter = 0; iter < n_mcmc; iter++) {
         if (Progress::check_abort())
             return -1.0;
@@ -322,9 +323,12 @@ List condInt_mcmc_temporal_branching_md(std::vector<double> ti, arma::mat t_misi
         alpha_samps(iter) = alpha_curr;
         beta_samps(iter) = beta_curr;
         z_samps(iter) = z_curr.size();
-        y_samps.col(iter) = arma::conv_to<arma::ivec>::from(y_curr);
-        if (iter > n_burn)
-          z_sampsallo[iter] = z_curr;
+        if (iter > n_burn){
+          z_sampsallo[cnt_iter] = z_curr;
+          y_sampso[cnt_iter] = y_curr;
+          cnt_iter++;
+        }
+
         p.increment();  // update progress
     }
 
@@ -332,12 +336,11 @@ List condInt_mcmc_temporal_branching_md(std::vector<double> ti, arma::mat t_misi
     arma::vec alpha_sampso = alpha_samps.subvec(n_burn, n_mcmc - 1);
     arma::vec beta_sampso = beta_samps.subvec(n_burn, n_mcmc - 1);
     arma::vec z_sampso = z_samps.subvec(n_burn, n_mcmc - 1);
-    arma::imat y_sampso = y_samps.cols(n_burn, n_mcmc - 1);
 
     DataFrame df = DataFrame::create(Rcpp::Named("mu") = mu_sampso, Rcpp::Named("alpha") = alpha_sampso,
-                                     Rcpp::Named("beta") = beta_sampso, Rcpp::Named("z") = z_sampso);
+                                     Rcpp::Named("beta") = beta_sampso, Rcpp::Named("n_missing") = z_sampso);
 
     List out = List::create(Named("samps") = df , _["branching"] = y_sampso, _["zsamps"] = z_sampsallo);
 
-    return (df);
+    return (out);
 }
