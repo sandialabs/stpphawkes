@@ -197,7 +197,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // condInt_mcmc_temporal_branching
-DataFrame condInt_mcmc_temporal_branching(std::vector<double> ti, double t_maxi, std::vector<int> y_init, double mu_init, double alpha_init, double beta_init, std::vector<double> mu_parami, std::vector<double> alpha_parami, std::vector<double> beta_parami, double sig_betai, int n_mcmc, int n_burn, bool print);
+List condInt_mcmc_temporal_branching(std::vector<double> ti, double t_maxi, std::vector<int> y_init, double mu_init, double alpha_init, double beta_init, std::vector<double> mu_parami, std::vector<double> alpha_parami, std::vector<double> beta_parami, double sig_betai, int n_mcmc, int n_burn, bool print);
 RcppExport SEXP _stpphawkes_condInt_mcmc_temporal_branching(SEXP tiSEXP, SEXP t_maxiSEXP, SEXP y_initSEXP, SEXP mu_initSEXP, SEXP alpha_initSEXP, SEXP beta_initSEXP, SEXP mu_paramiSEXP, SEXP alpha_paramiSEXP, SEXP beta_paramiSEXP, SEXP sig_betaiSEXP, SEXP n_mcmcSEXP, SEXP n_burnSEXP, SEXP printSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;

@@ -14,10 +14,10 @@
 #' @param mcmc_param - list of mcmc parameters
 #' @param branching - using branching structure in estimation (default = TRUE)
 #' @param print - print progress (default = TRUE)
-#' @return A DataFrame containing the mcmc samples
+#' @return A List containing the mcmc samples (samps), branching structure (y, if TRUE), number of missing points (z), and missing data (zsamps)
 #' @examples
 #' \donttest{
-#' times = simulate_temporal(.5,.1,.5,c(0,10),numeric()) 
+#' times = simulate_temporal(.5,.1,.5,c(0,10),numeric())
 #' out = mcmc_temporal(times)
 #' }
 #' @export
