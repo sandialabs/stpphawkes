@@ -9,3 +9,5 @@ fdasrvf.Rproj
 cran-comments.md
 ^.*\.Rproj$
 ^revdep$
+^\.positai$
+^\.claude$

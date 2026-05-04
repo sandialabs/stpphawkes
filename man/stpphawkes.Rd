@@ -26,6 +26,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item J. Derek Tucker \email{jdtuck@sandia.gov}
   \item Lyndsay Shand \email{lshand@sandia.gov}
   \item Stephen Rowe \email{srowe@sandia.gov}
   \item John Lewis \email{jrlewi@sandia.gov}
