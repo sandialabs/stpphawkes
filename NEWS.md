@@ -2,7 +2,7 @@
 
 # stpphawkes 0.2.2
 * bugfixes
-* add aditional outputs to mcmc to include missing data and branching structure
+* add additional outputs to mcmc to include missing data and branching structure
 
 # stpphawkes 0.2.1
 * bugfixes

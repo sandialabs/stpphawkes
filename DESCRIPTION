@@ -23,3 +23,4 @@ URL: https://github.com/sandialabs/stpphawkes
 BugReports: https://github.com/sandialabs/stpphawkes/issues
 LinkingTo: Rcpp, RcppArmadillo, RcppProgress, RcppGSL
 Config/roxygen2/version: 8.1.0
+
