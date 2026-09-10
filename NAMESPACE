@@ -18,14 +18,18 @@ export(temporal.catmark.mle)
 export(temporal.mle)
 importFrom(Rcpp,evalCpp)
 importFrom(grDevices,chull)
-importFrom(graphics,abline)
-importFrom(graphics,par)
-importFrom(stats,optim)
-importFrom(stats,predict)
-importFrom(stats,qnorm)
-importFrom(stats,rexp)
-importFrom(stats,rnorm)
-importFrom(stats,rpois)
-importFrom(stats,runif)
-importFrom(stats,var)
+importFrom(graphics,
+  abline,
+  par
+)
+importFrom(stats,
+  optim,
+  predict,
+  qnorm,
+  rexp,
+  rnorm,
+  rpois,
+  runif,
+  var
+)
 useDynLib(stpphawkes)

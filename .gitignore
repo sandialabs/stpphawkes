@@ -10,3 +10,4 @@
 *.kdev4
 build/
 CRAN-SUBMISSION
+.positai
