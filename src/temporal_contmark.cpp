@@ -28,6 +28,8 @@ DataFrame WeibullMarkMcMc(const std::vector<double>& t, const double t_max, cons
                       const std::vector<double> mu_params, std::vector<double>& alpha_param,
                       const std::vector<double>& beta_param, const std::vector<double>& wscale_param, const double sig_beta,
                       const size_t n_mcmc = 1e4, const size_t n_burn = 5e3, bool print = 1) {
+  SeedRngFromR();  // draw the C++ generator seed from R's RNG so set.seed() is honoured
+
   double alpha_a = alpha_param[0];
   double alpha_b = alpha_param[1];
 

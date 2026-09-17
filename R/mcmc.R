@@ -30,6 +30,8 @@ mcmc_temporal <- function(times, t_max=max(times), t_mis=NULL, param_init=NULL, 
                        beta_param=c(.1,.1))
   }
 
+  if(mcmc_param$n_burn >= mcmc_param$n_mcmc) {stop('n_burn must be less than n_mcmc')}
+
   if (is.null(param_init)){
     message("No default value for param_init, use MLE as starting point\n")
     param_init<-temporal.mle(times, t_max, print=FALSE)
@@ -95,9 +97,7 @@ mcmc_temporal <- function(times, t_max=max(times), t_mis=NULL, param_init=NULL, 
 mcmc_temporal_catmark <- function(times, marks, t_max=max(times), t_mis=NULL, param_init=NULL, mcmc_param=NULL,
                           branching=TRUE, print=TRUE){
   # check inputs
-  if(!is.factor(marks)){stop('marks is a factor, please specify number of levels')}
-
-  if(mcmc_param$n_burn >= mcmc_param$n_mcmc) {stop('n_burn must be less than n_mcmc')}
+  if(!is.factor(marks)){stop('marks must be a factor, please specify number of levels')}
 
   if (is.null(mcmc_param)){
     mcmc_param <- list(n_mcmc=2000, n_burn=500, sig_mu=.5, sig_alpha=.5, sig_beta=.5,mu_param=c(.1,.1), alpha_param=c(.1,.1),
@@ -109,6 +109,9 @@ mcmc_temporal_catmark <- function(times, marks, t_max=max(times), t_mis=NULL, pa
     if(!is.scalar(mcmc_param$n_mcmc)) {stop('n_mcmc must be numeric, length 1')}
     if(length(mcmc_param$p_param) != length(levels(marks))) {stop('p_param must have length equal to the number of levels in marks')}
   }
+
+  # checked after the defaults above are filled in, so mcmc_param = NULL still works
+  if(mcmc_param$n_burn >= mcmc_param$n_mcmc) {stop('n_burn must be less than n_mcmc')}
 
   if (is.null(param_init)){
     message("No default value for param_init, use MLE as starting point\n")
@@ -179,8 +182,6 @@ mcmc_temporal_contmark <- function(times, marks, wshape,t_max=max(times), t_mis=
   # check inputs
   if(!is.numeric(marks)){stop('marks must be numeric')}
 
-  if(mcmc_param$n_burn >= mcmc_param$n_mcmc) {stop('n_burn must be less than n_mcmc')}
-
   if (is.null(mcmc_param)){
     mcmc_param <- list(n_mcmc=2000, n_burn=500, sig_mu=.5, sig_alpha=.5, sig_beta=.5,mu_param=c(.1,.1), alpha_param=c(.1,.1),
                        beta_param=c(.1,.1),wscale_param=c(1,3))
@@ -191,6 +192,9 @@ mcmc_temporal_contmark <- function(times, marks, wshape,t_max=max(times), t_mis=
     if(!is.scalar(mcmc_param$n_mcmc)) {stop('n_mcmc must be numeric, length 1')}
     #if(length(mcmc_param$p_param) != length(levels(marks))) {stop('p_param must have length equal to the number of levels in marks')}
   }
+
+  # checked after the defaults above are filled in, so mcmc_param = NULL still works
+  if(mcmc_param$n_burn >= mcmc_param$n_mcmc) {stop('n_burn must be less than n_mcmc')}
 
   if (is.null(param_init)){
     stop("Initial parameters needed")
@@ -266,6 +270,8 @@ mcmc_stpp <- function(data, poly, t_max=max(data$t), t_mis=NULL, param_init=NULL
     mcmc_param <- list(n_mcmc=2000, n_burn=500, sig_mu=.5, sig_b=.5, sig_sig=.1, mu_param=c(.1,.1),a_param=c(0.1,0.1),b_param=c(0.1,0.1),sig_param=c(0.1,0.1))
   }
 
+  if(mcmc_param$n_burn >= mcmc_param$n_mcmc) {stop('n_burn must be less than n_mcmc')}
+
   if (is.null(param_init)){
     message("No default value for param_init, use MLE as starting point\n")
     param_init<-stpp.mle(data, poly, t_max, print=FALSE)
@@ -333,6 +339,8 @@ mcmc_stpp_nonunif <- function(data, poly, t_max=max(data$t), t_mis=NULL, param_i
     mcmc_param <- list(n_mcmc=2000, n_burn=500, sig_mu=.5, sig_b=.5, sig_sig=.1, mu_param=c(.1,.1),a_param=c(0.1,0.1),b_param=c(0.1,0.1),sig_param=c(0.1,0.1),
                        mux_param=c(mean(data$x),var(data$x)),muy_param=c(mean(data$y),var(data$y)),sigx_param=c(0.1,0.1),sigy_param=c(0.1,0.1))
   }
+
+  if(mcmc_param$n_burn >= mcmc_param$n_mcmc) {stop('n_burn must be less than n_mcmc')}
 
   if (is.null(param_init)){
     message("No default value for param_init, use MLE as starting point\n")

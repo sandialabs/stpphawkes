@@ -2,6 +2,8 @@
 
 #include <Rcpp.h>
 
+#include "rng_seed.h"
+
 // Correctly setup the build environment
 // [[Rcpp::depends(RcppArmadillo)]]
 
@@ -152,6 +154,8 @@ List condInt_mcmc_temporal(arma::vec ti, double t_maxi, double mu_init, double a
     if (t_maxi < 0) {
         stop("t_max must be larger than 0");
     }
+
+    SeedRngFromR();  // draw the C++ generator seed from R's RNG so set.seed() is honoured
 
     // initialize parameters
     t_max = t_maxi;

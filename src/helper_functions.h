@@ -5,7 +5,10 @@
 
 #include <Rcpp.h>
 
+#include <cstdint>
 #include <random>
+
+#include "rng_seed.h"
 
 #ifdef _OPENMP
 // Add a flag to enable OpenMP at compile time
@@ -24,15 +27,6 @@ inline double beta_tk(double t, double beta) {
 
 inline double Beta_tk(double t, double beta) { return 1 - std::exp(-beta * t); }
 
-inline std::mt19937 GenerateMersenneTwister() {
-#ifndef USE_NO_RANDOM_DEVICE
-    std::random_device rd;
-    return std::mt19937(rd());
-#else
-    return std::mt19937(0);
-#endif
-}
-
 inline std::vector<double> insertSimulatedTimes(const std::vector<double>& t, const std::vector<double>& z_curr) {
     std::vector<double> inserted_times = t;
     inserted_times.insert(inserted_times.end(), z_curr.begin(), z_curr.end());
@@ -47,7 +41,8 @@ inline std::vector<double> insertSimulatedTimes(const std::vector<double>& t, co
  * @param[in] t is a vector of times
  * @param[in] epsilon specifies a time amount that acts as a minimum acceptable time
  *
- * @return Returns an integer index into t such that all j < min_i, t[j] is not relevant for calculations
+ * @return Returns an integer index into t such that all j < min_i, t[j] is not relevant for calculations.
+ *         Returns 0 when every time is relevant, so the result is always a valid index into t.
  */
 inline int findMinimumRelevantTime(const std::vector<double>& t, const double epsilon) {
     int min_i;
@@ -57,6 +52,12 @@ inline int findMinimumRelevantTime(const std::vector<double>& t, const double ep
         if (t[min_i] < epsilon) {
             break;
         }
+    }
+
+    // No time satisfied the cutoff: every time is relevant, so start at the first one.
+    // Returning -1 here would make callers indexing from min_i read t[-1].
+    if (min_i < 0) {
+        min_i = 0;
     }
 
     return min_i;

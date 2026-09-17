@@ -1,5 +1,6 @@
 #include <RcppArmadillo.h>
 #include "areapl.h"
+#include "rng_seed.h"
 #include "utilities.h"
 // Correctly setup the build environment
 // [[Rcpp::depends(RcppArmadillo)]]
@@ -214,6 +215,8 @@ DataFrame condInt_mcmc_stpp(DataFrame data, double t_maxi, double mu_init, doubl
     if (t_maxi < 0) {
         stop("t_max must be larger than 0");
     }
+
+    SeedRngFromR();  // draw the C++ generator seed from R's RNG so set.seed() is honoured
 
     // initialize parameters
     W = areapl(poly);

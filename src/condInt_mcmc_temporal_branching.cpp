@@ -32,6 +32,8 @@ List condInt_mcmc_temporal_branching(std::vector<double> ti, double t_maxi, std:
         stop("t_max must be larger than 0");
     }
 
+    SeedRngFromR();  // draw the C++ generator seed from R's RNG so set.seed() is honoured
+
     // initialize parameters
     double t_max = t_maxi;
     std::vector<int> y_curr = y_init;

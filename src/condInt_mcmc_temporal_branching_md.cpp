@@ -323,7 +323,9 @@ List condInt_mcmc_temporal_branching_md(std::vector<double> ti, arma::mat t_misi
         alpha_samps(iter) = alpha_curr;
         beta_samps(iter) = beta_curr;
         z_samps(iter) = z_curr.size();
-        if (iter > n_burn){
+        // Must be >= to match the subvec(n_burn, n_mcmc - 1) used for the parameter
+        // samples below; with > the last list slot is never filled and stays NULL.
+        if (iter >= n_burn){
           z_sampsallo[cnt_iter] = z_curr;
           y_sampso[cnt_iter] = y_curr;
           cnt_iter++;
