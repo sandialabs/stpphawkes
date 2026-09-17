@@ -156,12 +156,15 @@ DataFrame simulate_hawkes_stpp(List params, arma::mat poly, arma::vec t_region, 
     // Combine all the generated points
     arma::mat out;
 
-    if (l == 0) {
-        arma::mat outf(0, 3);
-        return (outf);
+    if (l == 0 && G[0].n_rows == 0) {
+        return DataFrame::create(Rcpp::Named("x") = NumericVector::create(), Rcpp::Named("y") = NumericVector::create(),
+                                 Rcpp::Named("t") = NumericVector::create(),
+                                 Rcpp::Named("z") = NumericVector::create());
     }
 
-    for (int i = 0; i < l; i++) {
+    // G holds generations 0..l inclusive, so the bound must be <= l or the last
+    // generation generated is silently discarded.
+    for (int i = 0; i <= l; i++) {
         out = join_cols(out, G[i]);
     }
 
@@ -301,12 +304,13 @@ arma::mat simulate_hawkes_stpp_c(double mu, double a, double b, double sig, arma
     // Combine all the generated points
     arma::mat out;
 
-    if (l == 0) {
+    if (l == 0 && G[0].n_rows == 0) {
         arma::mat outf(0, 3);
         return (outf);
     }
 
-    for (int i = 0; i < l; i++) {
+    // G holds generations 0..l inclusive; see note in simulate_hawkes_stpp.
+    for (int i = 0; i <= l; i++) {
         out = join_cols(out, G[i]);
     }
 

@@ -171,6 +171,8 @@ DataFrame CatMarkMcMcMissingData(const std::vector<double>& t, const arma::mat& 
                                  const std::vector<double>& beta_params, const std::vector<double>& p_params,
                                  const double sig_beta, const size_t n_mcmc = 1e4, const size_t n_burn = 5e3,
                                  bool print = 1) {
+    SeedRngFromR();  // draw the C++ generator seed from R's RNG so set.seed() is honoured
+
     double alpha_a = alpha_params[0];
     double alpha_b = alpha_params[1];
     double beta_a = beta_params[0];

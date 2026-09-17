@@ -183,6 +183,8 @@ List condInt_mcmc_stpp_branching_md(DataFrame data, arma::mat t_misi, double t_m
         stop("t_max must be larger than 0");
     }
 
+    SeedRngFromR();  // draw the C++ generator seed from R's RNG so set.seed() is honoured
+
     std::vector<double> x = as<std::vector<double>>(data["x"]);
     std::vector<double> y = as<std::vector<double>>(data["y"]);
     std::vector<double> t = as<std::vector<double>>(data["t"]);
@@ -319,7 +321,9 @@ List condInt_mcmc_stpp_branching_md(DataFrame data, arma::mat t_misi, double t_m
         b_samps(iter) = b_curr;
         sig_samps(iter) = sig_curr;
         z_samps(iter) = z_curr_t_all.size();
-        if (iter > n_burn){
+        // Must be >= to match the subvec(n_burn, n_mcmc - 1) used for the parameter
+        // samples below; with > the last list slot is never filled and stays NULL.
+        if (iter >= n_burn){
           z_sampstallo[cnt_iter] = z_curr_t_all;
           z_sampsxallo[cnt_iter] = z_curr_x_all;
           z_sampsyallo[cnt_iter] = z_curr_y_all;

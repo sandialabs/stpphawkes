@@ -28,6 +28,11 @@ double betaPosterior(const std::vector<double>& t, const std::vector<double>& z,
                 break;
             }
         }
+        // No time satisfied the cutoff: every time is relevant. Without this the loop
+        // below would run down to i == -1 and read t[-1].
+        if (min_i < 0) {
+            min_i = 0;
+        }
         // Part 1 Calculation:
 
         double loglik = 0;

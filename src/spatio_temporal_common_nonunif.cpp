@@ -45,8 +45,8 @@ double sample_b(const std::vector<double>& t, const std::vector<double>& z_t, co
     b_prop = b_curr + rnorm(gen);
   }
   double top = b_posterior(t, t_max, a_curr, b_prop, z_t, b_params);
-  double rat =
-    std::exp(top - bottom) * (1 - normalCDF(a_curr - b_curr / sig_b)) / (1 - normalCDF(a_curr - b_prop / sig_b));
+  double rat = std::exp(top - bottom) * (1 - normalCDF((a_curr - b_curr) / sig_b)) /
+    (1 - normalCDF((a_curr - b_prop) / sig_b));
   if (runif(gen) < rat) {
     b_curr = b_prop;
   }
@@ -95,6 +95,10 @@ std::vector<int> sample_y(const std::vector<double>& t, const std::vector<double
   y_curr.resize(n);
   y_curr[0] = 0;
 
+  // Reserve one stream per loop iteration up front, so the parallel loop below is
+  // reproducible regardless of how iterations are scheduled across threads.
+  const std::uint64_t stream_base = (RngStreamCounter() += static_cast<std::uint64_t>(n)) - n;
+
   // Find minimum relevant times
 
   double epsilon = 36.0 / b_curr;
@@ -113,7 +117,9 @@ std::vector<int> sample_y(const std::vector<double>& t, const std::vector<double
 #else
 #endif
   for (int i = 1; i < n; ++i) {
-    auto gen = GenerateMersenneTwister();
+    // Explicit stream id: inside a parallel region the draws must not depend on
+    // which thread runs which iteration.
+    auto gen = GenerateMersenneTwister(stream_base + static_cast<std::uint64_t>(i));
 
     std::vector<double> probs(i + 1, 0);
 

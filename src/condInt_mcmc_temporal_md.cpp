@@ -1,4 +1,5 @@
 #include <RcppArmadillo.h>
+#include "rng_seed.h"
 #include "simulate_temporal_hawkes.h"
 #include "utilities.h"
 // Correctly setup the build environment
@@ -188,6 +189,8 @@ DataFrame condInt_mcmc_temporal_md(arma::vec ti, arma::vec t_misi, double t_maxi
         stop("t_max must be larger than 0");
     }
 
+    SeedRngFromR();  // draw the C++ generator seed from R's RNG so set.seed() is honoured
+
     // initialize parameters
     t_max = t_maxi;
     mu_curr = mu_init;
@@ -230,7 +233,9 @@ DataFrame condInt_mcmc_temporal_md(arma::vec ti, arma::vec t_misi, double t_maxi
         alpha_samps[iter] = alpha_curr;
         beta_samps[iter] = beta_curr;
         n_missing[iter] = z_curr.n_elem;
-        if (iter > n_burn){
+        // Must be >= to match the subvec(n_burn, n_mcmc - 1) used for the parameter
+        // samples below; with > the last list slot is never filled and stays NULL.
+        if (iter >= n_burn){
           z_sampsallo[cnt_iter] = z_curr;
           cnt_iter++;
         }

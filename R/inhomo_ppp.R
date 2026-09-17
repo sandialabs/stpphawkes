@@ -56,16 +56,25 @@ inhomog.STPP <- function(mu, poly, t.region, nx=101, ny=101, nt=101, xfrac=.1,
   y <- runif(npts,lr[3],lr[4])
 
   # Accpetance/Rejection of points
-  if (is.matrix(mu)){
-    prob <- interp::bicubic(s.grid$x, s.grid$y, Mu, x, y)$z
+  # NOTE: the test must match the branch that built Mu above (is.array), not is.matrix:
+  # a 3D array is not a matrix, so with is.matrix neither branch ran and no thinning was
+  # applied at all.
+  if (is.array(mu)){
+    # Mu is a 3D array, so interpolate on the time slice each point was sampled from
+    prob <- rep(0, npts)
+    for (it in unique(samp)){
+      ind <- which(samp == it)
+      prob[ind] <- interp::bicubic(s.grid$x, s.grid$y, Mu[,,it], x[ind], y[ind])$z
+    }
+    prob <- prob/mu.max
     u <- runif(npts)
     retain <- u <= prob
+    retain[is.na(retain)] <- FALSE  # points outside the polygon interpolate to NaN
     if (sum(retain==F)==length(retain)) stop ("no point was retained at the first iteration, please check your parameters")
 
     x <- x[retain]
     y <- y[retain]
     samp <- samp[retain]
-    samp.remain <- (1:nt)[-samp]
     times <- times[retain]
 
   } else if(is.function(mu)){
@@ -77,7 +86,6 @@ inhomog.STPP <- function(mu, poly, t.region, nx=101, ny=101, nt=101, xfrac=.1,
     x <- x[retain]
     y <- y[retain]
     samp <- samp[retain]
-    samp.remain <- (1:nt)[-samp]
     times <- times[retain]
   }
 
@@ -93,7 +101,8 @@ inhomog.STPP <- function(mu, poly, t.region, nx=101, ny=101, nt=101, xfrac=.1,
     plot(x, y)
   }
 
-  out = data.frame(x=x,y=y,t=times,type=as.character(1:length(times)),stringsAsFactors=F)
+  # seq_along, not 1:length: the latter yields c(1,0) when no points were retained
+  out = data.frame(x=x,y=y,t=times,type=as.character(seq_along(times)),stringsAsFactors=F)
 
   return(out)
 }

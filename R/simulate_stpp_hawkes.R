@@ -7,7 +7,7 @@ simulate_hawkes_stpp_inhom <- function(mu, params, poly, t.region=NULL, seed=NUL
   else
     set.seed(seed)
 
-  if (ndims(params$mu!=0))
+  if (ndims(params$mu) == 0)
     stop("mu needs to be a matrix")
   if (params$a<=0)
     stop("a needs to be greater than 0")
@@ -46,7 +46,7 @@ simulate_hawkes_stpp_inhom <- function(mu, params, poly, t.region=NULL, seed=NUL
     xi <- c()
     yi <- c()
     typei <- c()
-    for (ii in 1:nrow(G[[l]])){
+    for (ii in seq_len(nrow(G[[l]]))){
       npts <- rpois(1,params$a)
       if (npts>0){
         for (jj in 1:npts){
@@ -81,11 +81,13 @@ simulate_hawkes_stpp_inhom <- function(mu, params, poly, t.region=NULL, seed=NUL
   }
 
   # Combine all the generated points
+  # seq_len, not 2:length(G): the latter is c(2,1) when only the background exists,
+  # which indexes G[[2]] out of bounds
   ti <- c()
   xi <- c()
   yi <- c()
   typei <- c()
-  for (ii in 2:length(G)){
+  for (ii in seq_len(length(G))[-1]){
     ti <- c(ti, G[[ii]]$t)
     xi <- c(xi, G[[ii]]$x)
     yi <- c(yi, G[[ii]]$y)
@@ -170,7 +172,7 @@ simulate_hawkes_stpp_lomax <- function(params, poly, t.region=NULL){
     xi <- c()
     yi <- c()
     typei <- c()
-    for (ii in 1:nrow(G[[l]])){
+    for (ii in seq_len(nrow(G[[l]]))){
       npts <- rpois(1,params$a)
       if (npts>0){
         for (jj in 1:npts){

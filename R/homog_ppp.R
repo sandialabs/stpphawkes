@@ -35,7 +35,7 @@ homog.STPP <- function(mu, poly, t.region, xfrac=.1, yfrac=.1,
   x <- runif(npts,lr[1],lr[2])
   y <- runif(npts,lr[3],lr[4])
   times <- runif(npts,min=t.region[1],max=t.region[2])
-  samp <- sample(1:npts,npts,replace=F)
+  samp <- sample(seq_len(npts),npts,replace=F)
   times <- times[samp]
   times <- sort(times)
 
@@ -54,7 +54,8 @@ homog.STPP <- function(mu, poly, t.region, xfrac=.1, yfrac=.1,
   #if(length(unqiue(out$t))<length(out$t)){
   #  t=t+rnorm(length(t),0,1E-16)
   #}
-  out = data.frame(x=x,y=y,t=times,type=as.character(1:length(times)),stringsAsFactors=F)
+  # seq_along, not 1:length: the latter yields c(1,0) when no points were generated
+  out = data.frame(x=x,y=y,t=times,type=as.character(seq_along(times)),stringsAsFactors=F)
 
   return(out)
 }

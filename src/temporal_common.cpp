@@ -51,11 +51,17 @@ double temporalLogLikelihood(const std::vector<double>& t, double mu, double alp
     double epsilon = 1e-15;
 
     double minimum_time = std::log(epsilon) / beta + t_max;
-    size_t min_i;
+    // min_i must be signed: as a size_t the condition min_i >= 0 is always true and the
+    // counter wraps to SIZE_MAX, which then poisons the min_i * alpha term below.
+    int min_i;
     for (min_i = n - 1; min_i >= 0; --min_i) {
         if (t[min_i] < minimum_time) {
             break;
         }
+    }
+    // No time satisfied the cutoff: every time contributes to the sum below.
+    if (min_i < 0) {
+        min_i = 0;
     }
 
 // Find first index of time walking backwards where this minimum time occurs;
@@ -125,6 +131,10 @@ std::vector<int> sample_y(double alpha_curr, double beta_curr, double mu_curr, c
     std::vector<int> y_curr(n);
     y_curr[0] = 0;
 
+    // Reserve one stream per loop iteration up front, so the parallel loop below is
+    // reproducible regardless of how iterations are scheduled across threads.
+    const std::uint64_t stream_base = (RngStreamCounter() += static_cast<std::uint64_t>(n)) - n;
+
     std::vector<size_t> min_is(n);
     min_is[0] = 0;
     double alpha_beta_product = alpha_curr * beta_curr;
@@ -155,7 +165,9 @@ std::vector<int> sample_y(double alpha_curr, double beta_curr, double mu_curr, c
 #else
 #endif
     for (int i = 1; i < n; i++) {
-        auto gen = GenerateMersenneTwister();
+        // Explicit stream id: inside a parallel region the draws must not depend on
+        // which thread runs which iteration.
+        auto gen = GenerateMersenneTwister(stream_base + static_cast<std::uint64_t>(i));
         std::vector<double> probs(i + 1, 0);
 
         probs[0] = mu_curr;

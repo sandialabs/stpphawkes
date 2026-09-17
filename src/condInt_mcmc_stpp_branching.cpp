@@ -33,6 +33,8 @@ List condInt_mcmc_stpp_branching(DataFrame data, double t_maxi, std::vector<int>
         stop("t_max must be larger than 0");
     }
 
+    SeedRngFromR();  // draw the C++ generator seed from R's RNG so set.seed() is honoured
+
     std::vector<double> x = as<std::vector<double> >(data["x"]);
     std::vector<double> y = as<std::vector<double> >(data["y"]);
     std::vector<double> t = as<std::vector<double> >(data["t"]);
