@@ -12,11 +12,14 @@ arma::mat homog_STPP(double mu, arma::mat poly, arma::vec t_region, double xfrac
     }
 
     arma::mat lr = larger_region(poly, xfrac, yfrac);
+    // The points are laid down over the enlarged region, so its area has to enter the Poisson
+    // rate as well; otherwise the realised background intensity is mu/s_area, not mu.
+    double s_area = (lr(1, 0) - lr(0, 0)) * (lr(1, 1) - lr(0, 1));
 
     t_region = sort(t_region);
     double t_area = t_region(1) - t_region(0);
 
-    int npts = R::rpois(mu * t_area);
+    int npts = R::rpois(mu * s_area * t_area);
 
     NumericVector x = runif(npts, lr(0, 0), lr(1, 0));
     NumericVector y = runif(npts, lr(0, 1), lr(1, 1));

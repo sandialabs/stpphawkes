@@ -62,7 +62,7 @@ arma::vec simulate_temporal(const double mu, double alpha, const double beta, co
     arma::vec arrivals;
     double t_max = tt(1);
     double s, t, dlambda, lambda_star;
-    double U, u0, idx;
+    double U, u0;
     s = t = dlambda = lambda_star = 0;
 
     if (times.n_elem == 0 || min(times) > tt(0)) {
@@ -82,7 +82,7 @@ arma::vec simulate_temporal(const double mu, double alpha, const double beta, co
         arrivals.resize(1);
         arrivals(0) = t;
     } else {
-        idx = 0;
+        arma::uword idx = 0;
         if (max(times) <= tt(0)) {
             idx = times.n_elem - 1;
         } else {
@@ -99,7 +99,7 @@ arma::vec simulate_temporal(const double mu, double alpha, const double beta, co
         arma::vec time_sub = times.subvec(0, idx);
         lambda_star = intensity_temporal(mu, alpha, beta, time_sub, s);
         dlambda = alpha;
-        for (int i = 1; i <= idx; i++) {
+        for (arma::uword i = 1; i <= idx; i++) {
             dlambda = alpha + dlambda * exp(-beta * (times(i) - times(i - 1)));
         }
     }

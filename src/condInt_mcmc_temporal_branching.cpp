@@ -54,9 +54,6 @@ List condInt_mcmc_temporal_branching(std::vector<double> ti, double t_maxi, std:
     std::vector<double> z;
     z.reserve(n);
 
-    std::vector<int> numtriggered;
-    numtriggered.resize(n);
-
     int numbackground;
 
     // begin mcmc
@@ -67,11 +64,9 @@ List condInt_mcmc_temporal_branching(std::vector<double> ti, double t_maxi, std:
         y_curr = temporal::sample_y(alpha_curr, beta_curr, mu_curr, t);
 
         z.clear();
-        std::fill(numtriggered.begin(), numtriggered.end(), 0);
         numbackground = 0;
         for (int i = 0; i < n; i++) {
             if (y_curr[i] > 0) {
-                numtriggered[y_curr[i] - 1]++;
                 z.push_back(t[i] - t[y_curr[i] - 1]);
             } else {
                 numbackground++;

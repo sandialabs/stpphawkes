@@ -8,6 +8,7 @@ export(mcmc_stpp_nonunif)
 export(mcmc_temporal)
 export(mcmc_temporal_catmark)
 export(mcmc_temporal_contmark)
+export(pip)
 export(ptinpoly)
 export(simulate_hawkes_stpp)
 export(simulate_hawkes_stpp_nonunif)
@@ -18,18 +19,14 @@ export(temporal.catmark.mle)
 export(temporal.mle)
 importFrom(Rcpp,evalCpp)
 importFrom(grDevices,chull)
-importFrom(graphics,
-  abline,
-  par
-)
-importFrom(stats,
-  optim,
-  predict,
-  qnorm,
-  rexp,
-  rnorm,
-  rpois,
-  runif,
-  var
-)
+importFrom(graphics,abline)
+importFrom(graphics,par)
+importFrom(stats,optim)
+importFrom(stats,predict)
+importFrom(stats,qnorm)
+importFrom(stats,rexp)
+importFrom(stats,rnorm)
+importFrom(stats,rpois)
+importFrom(stats,runif)
+importFrom(stats,var)
 useDynLib(stpphawkes)

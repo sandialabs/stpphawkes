@@ -4,6 +4,7 @@
 
 #include <gsl/gsl_randist.h>
 
+#include "gsl_rng_holder.h"
 #include "helper_functions.h"
 #include "simulate_temporal_hawkes.h"
 #include "temporal_common.h"
@@ -221,7 +222,9 @@ DataFrame CatMarkMcMcMissingData(const std::vector<double>& t, const arma::mat& 
     std::vector<double> z;
     z.reserve(t.size());
     // Begin MCMC
-    gsl_rng* rng = gsl_rng_alloc(gsl_rng_mt19937);  // Arguably, we should std::unique_ptr<> this
+    // Seeded from R's RNG and freed on every exit path, including the abort below.
+    GslRngHolder rng_holder;
+    gsl_rng* rng = rng_holder.get();
     std::vector<int> mark_curr = initializeMarks(z_curr, p_curr, rng);
 
     Progress p(n_mcmc, print);
@@ -262,8 +265,6 @@ DataFrame CatMarkMcMcMissingData(const std::vector<double>& t, const arma::mat& 
         p_samps.row(iter) = arma::conv_to<arma::rowvec>::from(p_curr);
         p.increment();  // update progress
     }
-    // Release random number generator
-    gsl_rng_free(rng);
 
     arma::vec mu_sampso = mu_samps.subvec(n_burn, n_mcmc - 1);
     arma::vec alpha_sampso = alpha_samps.subvec(n_burn, n_mcmc - 1);

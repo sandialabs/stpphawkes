@@ -1,5 +1,6 @@
-## This assumes that the LIB_GSL variable points to working GSL libraries
 ## Use the R_HOME indirection to support installations of multiple R version
+## RcppGSL reports the GSL flags configured for this installation; the obsolete LIB_GSL
+## variable is unset on current Rtools, which yielded -I/include -L/lib.
 
-PKG_CXXFLAGS=$(SHLIB_OPENMP_CXXFLAGS) -I$(LIB_GSL)/include
-PKG_LIBS = -L$(LIB_GSL)/lib -lgsl -lgslcblas $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS) $(SHLIB_OPENMP_CXXFLAGS)
+PKG_CXXFLAGS=$(SHLIB_OPENMP_CXXFLAGS) $(shell "$(R_HOME)/bin$(R_ARCH_BIN)/Rscript.exe" -e "RcppGSL:::CFlags()")
+PKG_LIBS = $(shell "$(R_HOME)/bin$(R_ARCH_BIN)/Rscript.exe" -e "RcppGSL:::LdFlags()") $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS) $(SHLIB_OPENMP_CXXFLAGS)

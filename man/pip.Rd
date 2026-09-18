@@ -15,7 +15,6 @@ pip(x, y, poly)
 }
 \value{
 A list containing the x and y coordinates of the points inside the polygon
- @export
 }
 \description{
 Determines if a point is in a polygon or on a polygon boundary
