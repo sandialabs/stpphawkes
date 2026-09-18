@@ -188,6 +188,7 @@ mcmc_temporal_contmark <- function(times, marks, wshape,t_max=max(times), t_mis=
   } else {
     if(!is.length2(mcmc_param$alpha_param)) {stop('alpha_param must be numeric, length 2')}
     if(!is.length2(mcmc_param$beta_param)) {stop('beta_param must be numeric, length 2')}
+    if(!is.length2(mcmc_param$wscale_param)) {stop('wscale_param must be numeric, length 2')}
     if(!is.scalar(mcmc_param$sig_beta)) {stop('sig_beta must be numeric, length 1')}
     if(!is.scalar(mcmc_param$n_mcmc)) {stop('n_mcmc must be numeric, length 1')}
     #if(length(mcmc_param$p_param) != length(levels(marks))) {stop('p_param must have length equal to the number of levels in marks')}
@@ -202,6 +203,10 @@ mcmc_temporal_contmark <- function(times, marks, wshape,t_max=max(times), t_mis=
     if(!is.scalar(param_init$mu)) {stop('mu_init must be numeric, length 1')}
     if(!is.scalar(param_init$alpha)) {stop('alpha_init must be numeric, length 1')}
     if(!is.scalar(param_init$beta)) {stop('beta_init must be numeric, length 1')}
+    # wscale is drawn from its full conditional on the first sweep, so a starting value is only
+    # needed to satisfy the C++ signature; without a default a NULL reaches Rcpp as an error
+    if(is.null(param_init$wscale)) {param_init$wscale <- 1}
+    if(!is.scalar(param_init$wscale)) {stop('wscale_init must be numeric, length 1')}
   }
 
   if (is.null(t_mis)){
@@ -344,7 +349,7 @@ mcmc_stpp_nonunif <- function(data, poly, t_max=max(data$t), t_mis=NULL, param_i
 
   if (is.null(param_init)){
     message("No default value for param_init, use MLE as starting point\n")
-    param_init<-stpp.mle.nonunif(data, t_max, print=FALSE)
+    param_init<-stpp.mle.nonunif(data, poly, t_max, print=FALSE)
   }
 
   if (is.null(t_mis)){

@@ -108,7 +108,10 @@ std::vector<double> sampleP(const std::vector<int>& marks, const std::vector<dou
     auto number_of_counts_per_mark = countMarks(marks, kk);
     std::vector<double> dirichlet_parameters(number_of_counts_per_mark.size());
     if (p_param.size() != number_of_counts_per_mark.size()) {
-        throw;
+        // countMarks inserts a key for every mark it sees, so a size mismatch means a mark code
+        // fell outside 1...kk. A bare throw with no active exception would call std::terminate()
+        // and take the R session down with it.
+        Rcpp::stop("marks must be integers in 1...%d, matching the length of p_param", static_cast<int>(kk));
     }
     for (size_t i = 0; i < kk; ++i) {
         dirichlet_parameters[i] += number_of_counts_per_mark[i] + p_param[i];

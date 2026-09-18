@@ -39,7 +39,9 @@ DataFrame WeibullMarkMcMc(const std::vector<double>& t, const double t_max, cons
   double mu_curr = mu_init;
   double alpha_curr = alpha_init;
   double beta_curr = beta_init;
-  //double wscale_curr = wscale_init;
+  // wscale is drawn from its full conditional at the top of every sweep, so the supplied starting
+  // value never enters the chain. The argument is kept so the R-side signature stays unchanged.
+  (void)wscale_init;
 
   std::vector<int> ntriggered(t.size(), 0);
 
@@ -53,7 +55,6 @@ DataFrame WeibullMarkMcMc(const std::vector<double>& t, const double t_max, cons
   z.reserve(t.size());
 
   // Begin MCMC
-  gsl_rng* rng = gsl_rng_alloc(gsl_rng_mt19937);  // Arguably, we should std::unique_ptr<> this
   Progress p(n_mcmc, print);
   for (size_t iter = 0; iter < n_mcmc; ++iter) {
     if (Progress::check_abort()) {
@@ -80,9 +81,6 @@ DataFrame WeibullMarkMcMc(const std::vector<double>& t, const double t_max, cons
     wscale_samps(iter) = wscale_curr;
     p.increment();  // update progress
   }
-  // Release random number generator
-  gsl_rng_free(rng);
-
   arma::vec mu_sampso = mu_samps.subvec(n_burn, n_mcmc - 1);
   arma::vec alpha_sampso = alpha_samps.subvec(n_burn, n_mcmc - 1);
   arma::vec beta_sampso = beta_samps.subvec(n_burn, n_mcmc - 1);

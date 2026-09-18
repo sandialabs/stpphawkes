@@ -2,12 +2,17 @@ simulate_hawkes_stpp_inhom <- function(mu, params, poly, t.region=NULL, seed=NUL
   # This simulates event times, called "times", according to a self-exciting
   # point process with paraemters param
 
-  if (is.null(seed))
-    seed <- .Random.seed
-  else
+  if (is.null(seed)){
+    # .Random.seed only exists once the RNG has been used, so force it into existence
+    # before recording it; the recorded value is attached to the result below.
+    if (!exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE))
+      runif(1)
+    seed <- get(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
+  } else {
     set.seed(seed)
+  }
 
-  if (ndims(params$mu) == 0)
+  if (ndims(mu) == 0)
     stop("mu needs to be a matrix")
   if (params$a<=0)
     stop("a needs to be greater than 0")
@@ -18,7 +23,7 @@ simulate_hawkes_stpp_inhom <- function(mu, params, poly, t.region=NULL, seed=NUL
   fraction <- 0.01 ## this is the fraction of offspring we want
   ## each sequence to be short by, on average
   n <- params$a
-  time.ext <- -params$b*log(fraction)
+  time.ext <- -log(fraction)/params$b
 
   # Generate the background catalog as a Poisson process with the background intensity µ
   # do this on larger region in space and time to overcome edge effects
@@ -81,13 +86,13 @@ simulate_hawkes_stpp_inhom <- function(mu, params, poly, t.region=NULL, seed=NUL
   }
 
   # Combine all the generated points
-  # seq_len, not 2:length(G): the latter is c(2,1) when only the background exists,
-  # which indexes G[[2]] out of bounds
+  # seq_along, not 2:length(G): the latter is c(2,1) when only the background exists,
+  # which indexes G[[2]] out of bounds, and [-1] would drop the background catalog entirely
   ti <- c()
   xi <- c()
   yi <- c()
   typei <- c()
-  for (ii in seq_len(length(G))[-1]){
+  for (ii in seq_along(G)){
     ti <- c(ti, G[[ii]]$t)
     xi <- c(xi, G[[ii]]$x)
     yi <- c(yi, G[[ii]]$y)
