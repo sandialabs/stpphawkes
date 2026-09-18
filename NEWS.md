@@ -1,3 +1,5 @@
+# stpphawkes (development version)
+
 # stpphawkes 0.2.4
 * memory bugfixes
 
