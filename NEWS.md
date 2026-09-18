@@ -1,4 +1,5 @@
-# stpphawkes 0.2.900
+# stpphawkes 0.2.XXX
+* memory bugfixes
 
 # stpphawkes 0.2.2
 * bugfixes
