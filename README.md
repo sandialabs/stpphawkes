@@ -13,7 +13,7 @@ data
 
 ### Installation
 ------------------------------------------------------------------------------
-v0.2.2 is on [CRAN](https://cran.r-project.org/package=stpphawkes)
+v0.2.4 is on [CRAN](https://cran.r-project.org/package=stpphawkes)
 and can be installed as
 > `install.packages("stpphawkes")`
 
