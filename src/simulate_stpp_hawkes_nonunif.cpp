@@ -67,7 +67,7 @@ DataFrame simulate_hawkes_stpp_nonunif(List params, arma::mat poly, arma::vec t_
     // this is the fraction of offspring we want
     // each sequence to be short by, on average
     double fraction = 0.01;
-    double time_ext = -b * log(fraction);
+    double time_ext = -log(fraction) / b;
 
     // Generate the background catalog as a Poisson process with the background intensity µ
     // do this on larger region in space and time to overcome edge effects
@@ -233,7 +233,7 @@ arma::mat simulate_hawkes_nonunif_stpp_c(double mu, double a, double b, double s
       // this is the fraction of offspring we want
       // each sequence to be short by, on average
       double fraction = 0.01;
-      double time_ext = -b * log(fraction);
+      double time_ext = -log(fraction) / b;
 
       // Generate the background catalog as a Poisson process with the background intensity µ
       // do this on larger region in space and time to overcome edge effects

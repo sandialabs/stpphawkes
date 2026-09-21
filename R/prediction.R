@@ -2,8 +2,8 @@ predict_hawkes_t <- function(post_samps, times, evalpt, t_mis=NULL){
   param <- colMeans(post_samps)
 
   if (!is.null(t_mis)){
-    z <- simulate_temporal(param["mu"], param["alpha"]*param["beta"],
-                             param["beta"], t_mis, times, -1)
+    z <- simulate_temporal(param["mu"], param["alpha"],
+                           param["beta"], t_mis, times, -1)
     times<-sort(c(times,z))
   }
 
@@ -49,7 +49,7 @@ intensity_stpp <- function(mu, a, b, sig, x, y, times, poly, evalpt) {
     use <- times <= evalpt[3]
     if (sum(use)>0){
       beta <- b*exp(-b*(evalpt[3]-times[use]))
-      alpha <- 1/(2*pi*sig^2)*exp(-((evalpt[1]-x[use])^2+(evalpt[2]-y[use])^2)/(2*sig^2))
+      alpha <- 1/(2*pi*sig)*exp(-((evalpt[1]-x[use])^2+(evalpt[2]-y[use])^2)/(2*sig))
       ci <- a * sum(beta*alpha)
     } else
       ci <- 0

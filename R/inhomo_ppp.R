@@ -119,7 +119,7 @@ inhomog.PPP <- function(mu, lambda, poly, l.x, l.y, checkpoly = T, showplot=T){
 	        stop("Polygon argument may be malformed")
 	}
 
-    p.homog <- homog.PPP(mu, poly)
+    p.homog <- homog.SPPP(mu, poly, checkpoly = FALSE, showplot = FALSE)
     nmax <- nrow(p.homog)
     P <- lambda/max(lambda)
 

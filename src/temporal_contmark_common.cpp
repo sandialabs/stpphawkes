@@ -13,7 +13,7 @@ namespace contmark {
 double sample_wscale(const std::vector<double>& marks, const std::vector<double>& wscale_param, const double wshape) {
   double alpha_wscale=wscale_param[0]+marks.size();
   double summark=0;
-  for(int i = 0; i < marks.size(); ++i){
+  for(size_t i = 0; i < marks.size(); ++i){
     summark+=pow(marks[i],wshape);
   }
   double beta_wscale=wscale_param[1]+summark;
@@ -31,4 +31,4 @@ double sample_wscale(const std::vector<double>& marks, const std::vector<double>
 }
 
 
-}  // end namespace catmark
+}  // end namespace contmark

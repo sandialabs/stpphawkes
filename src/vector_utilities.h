@@ -27,7 +27,8 @@ void reorder(std::vector<T>& arr, std::vector<size_t> index) {
     // Fix all elements one by one
 
     size_t n = arr.size();
-    for (size_t i = 0; i < n - 1; ++i) {
+    // i + 1 < n, not i < n - 1: an empty vector would wrap n - 1 round to SIZE_MAX
+    for (size_t i = 0; i + 1 < n; ++i) {
         // While index[i] and arr[i] are not fixed
         while (index[i] != index[index[i]]) {
             std::swap(arr[index[i]], arr[index[index[i]]]);
@@ -50,7 +51,8 @@ inline void Swap(size_t i, size_t alt, std::vector<double>& x) {
 template <typename... Args>
 void reorder(std::vector<size_t> index, Args&... args) {
     size_t n = index.size();
-    for (size_t i = 0; i < n - 1; ++i) {
+    // i + 1 < n, not i < n - 1: an empty index would wrap n - 1 round to SIZE_MAX
+    for (size_t i = 0; i + 1 < n; ++i) {
         while (index[i] != index[index[i]]) {
             // Sort each of the vectors
 

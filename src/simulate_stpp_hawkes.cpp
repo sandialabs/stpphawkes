@@ -7,6 +7,21 @@
 
 using namespace Rcpp;
 
+namespace {
+// A history data frame does not necessarily carry the same number of numeric columns as the
+// background matrix it is prepended to: a result of simulate_hawkes_stpp has x,y,t,z while
+// homog.STPP has x,y,t. Line the two up on their leading columns so join_cols does not throw.
+arma::mat matchColumns(arma::mat history_sub, const arma::uword n_cols) {
+    if (history_sub.n_cols > n_cols) {
+        return history_sub.cols(0, n_cols - 1);
+    }
+    if (history_sub.n_cols < n_cols) {
+        history_sub.insert_cols(history_sub.n_cols, n_cols - history_sub.n_cols);
+    }
+    return history_sub;
+}
+}  // namespace
+
 
 //' Simulate homogenous spatio-temporal hawkes model
 //'
@@ -54,7 +69,7 @@ DataFrame simulate_hawkes_stpp(List params, arma::mat poly, arma::vec t_region, 
     // this is the fraction of offspring we want
     // each sequence to be short by, on average
     double fraction = 0.01;
-    double time_ext = -b * log(fraction);
+    double time_ext = -log(fraction) / b;
 
     // Generate the background catalog as a Poisson process with the background intensity µ
     // do this on larger region in space and time to overcome edge effects
@@ -81,17 +96,19 @@ DataFrame simulate_hawkes_stpp(List params, arma::mat poly, arma::vec t_region, 
 
     arma::mat bgrd = homog_STPP(mu, poly, t_region1, rng / xw, rng / yw);
 
+    // The generation column has to exist before the history is prepended, or the two blocks
+    // disagree on their width.
+    bgrd.insert_cols(3, 1);
+
     if (history1.n_elem > 0) {
         arma::vec t_tmp = history1.col(2);
         arma::uvec idx1 = find(t_tmp < t_region[0], 1, "last");
 
         if (idx1.n_elem > 0) {
-            arma::mat history_sub = history1.rows(0, idx1[0]);
+            arma::mat history_sub = matchColumns(history1.rows(0, idx1[0]), bgrd.n_cols);
             bgrd = join_cols(history_sub, bgrd);
         }
     }
-
-    bgrd.insert_cols(3, 1);
 
     int l = 0;
     std::vector<arma::mat> G;
@@ -168,9 +185,17 @@ DataFrame simulate_hawkes_stpp(List params, arma::mat poly, arma::vec t_region, 
         out = join_cols(out, G[i]);
     }
 
-    // only remove points that are outisde time region
-    arma::uvec ind = find((out.col(2) >= t_region(0)) && (out.col(2) <= t_region(1)));
-    arma::mat out2 = out.rows(ind);
+    // The background was deliberately laid down on an enlarged region to avoid edge effects, so
+    // the points falling outside the study polygon have to be dropped before returning.
+    arma::vec tmpx = out.col(0);
+    arma::vec tmpy = out.col(1);
+    arma::uvec inoutv = inout(tmpx, tmpy, poly, true);
+    arma::uvec ind = find(inoutv > 0);
+    arma::mat out1 = out.rows(ind);
+
+    // and remove points that are outisde time region
+    ind = find((out1.col(2) >= t_region(0)) && (out1.col(2) <= t_region(1)));
+    arma::mat out2 = out1.rows(ind);
 
     // sort events
     ind = sort_index(out2.col(2));
@@ -212,7 +237,7 @@ arma::mat simulate_hawkes_stpp_c(double mu, double a, double b, double sig, arma
     // this is the fraction of offspring we want
     // each sequence to be short by, on average
     double fraction = 0.01;
-    double time_ext = -b * log(fraction);
+    double time_ext = -log(fraction) / b;
 
     // Generate the background catalog as a Poisson process with the background intensity µ
     // do this on larger region in space and time to overcome edge effects
@@ -243,7 +268,7 @@ arma::mat simulate_hawkes_stpp_c(double mu, double a, double b, double sig, arma
         arma::uvec idx1 = find(t_tmp < t_region[0], 1, "last");
 
         if (idx1.n_elem > 0) {
-            arma::mat history_sub = history1.rows(0, idx1[0]);
+            arma::mat history_sub = matchColumns(history1.rows(0, idx1[0]), bgrd.n_cols);
             bgrd = join_cols(history_sub, bgrd);
         }
     }

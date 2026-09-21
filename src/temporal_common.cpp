@@ -1,10 +1,18 @@
 #include "temporal_common.h"
 
+#include <algorithm>
+
 #include "simulate_temporal_hawkes.h"
 
 namespace temporal {
 double temporalLogLikelihood(const std::vector<double>& t, double mu, double alpha, double beta, double t_max) {
     int n = t.size();
+
+    // With no events the log-likelihood is just the compensator of the background intensity.
+    // Returning early also keeps min_is[0] below from writing into an empty vector.
+    if (n == 0) {
+        return -mu * t_max;
+    }
 
     double part1 = 0;
 
@@ -59,10 +67,10 @@ double temporalLogLikelihood(const std::vector<double>& t, double mu, double alp
             break;
         }
     }
-    // No time satisfied the cutoff: every time contributes to the sum below.
-    if (min_i < 0) {
-        min_i = 0;
-    }
+    // min_i is the last index whose Beta_tk(t_max - t[i], beta) is within epsilon of 1, so the
+    // indices 0 ... min_i (that is min_i + 1 terms, not min_i) are approximated by alpha each.
+    // When no time satisfied the cutoff min_i is -1, which correctly approximates nothing and
+    // lets the exact loop below start at index 0.
 
 // Find first index of time walking backwards where this minimum time occurs;
 
@@ -73,7 +81,7 @@ double temporalLogLikelihood(const std::vector<double>& t, double mu, double alp
     for (int i = min_i + 1; i < n; i++) {
         part3 += alpha * Beta_tk(t_max - t[i], beta);
     }
-    part3 += min_i * alpha;
+    part3 += (min_i + 1) * alpha;
 
     return (part1 - part2 - part3);
 }
@@ -129,6 +137,9 @@ double sample_mu(double t_max, int numbackground, const std::vector<double>& mu_
 std::vector<int> sample_y(double alpha_curr, double beta_curr, double mu_curr, const std::vector<double>& t_tmp) {
     int n = t_tmp.size();
     std::vector<int> y_curr(n);
+    if (n == 0) {
+        return y_curr;
+    }
     y_curr[0] = 0;
 
     // Reserve one stream per loop iteration up front, so the parallel loop below is
@@ -195,19 +206,41 @@ double sample_alpha(const std::vector<double>& t, const int sum_numtriggered, co
     }
 
     // Compute Gamma(sum_numtriggered + alpha_a, sum(Beta_tk(t_max-t,beta)) + alpha_b)
+    // truncated to (0, min(1, beta_curr)) so the process stays stable.
+    const double shape = sum_numtriggered + alpha_a;
+    const double scale = 1.0 / (exponential_sum + alpha_b);
+    const double upper = std::min(1.0, beta_curr);
+
+    if (upper <= 0) {
+        Rcpp::stop("beta must be greater than 0 to sample alpha");
+    }
+
     auto gen = GenerateMersenneTwister();
 
-    std::gamma_distribution<> rgamma(sum_numtriggered + alpha_a, 1.0 / (exponential_sum + alpha_b));
+    std::gamma_distribution<> rgamma(shape, scale);
 
-    double alpha_curr = 0.0;
-    bool a_constraint = true;
-    while (a_constraint) {
-        alpha_curr = rgamma(gen);
+    // Rejection sampling is cheap whenever the truncation region carries most of the mass, but it
+    // never terminates when it does not, so cap the attempts and fall back to an exact inverse-CDF
+    // draw from the truncated gamma.
+    constexpr int max_attempts = 1000;
+    for (int attempt = 0; attempt < max_attempts; ++attempt) {
+        double alpha_curr = rgamma(gen);
         if (alpha_curr < 1 && alpha_curr < beta_curr) {
-            a_constraint = false;
+            return alpha_curr;
         }
     }
-    return alpha_curr;
+
+    // log P(X <= upper); working on the log scale keeps the quantile well defined when the
+    // truncation region holds a vanishing amount of probability.
+    const double log_p_upper = R::pgamma(upper, shape, scale, 1, 1);
+
+    std::uniform_real_distribution<> runif(0, 1);
+    double u = runif(gen);
+    while (u <= 0) {
+        u = runif(gen);
+    }
+
+    return R::qgamma(log_p_upper + std::log(u), shape, scale, 1, 1);
 }
 
 double sample_beta(double alpha_curr, double beta_curr, double t_max, double sig_beta, const std::vector<double>& t,
@@ -240,8 +273,6 @@ std::vector<std::vector<double>> simulateMissingTimes(const std::vector<double>&
     int n_mis = t_missing.n_rows;
     z_currs.resize(n_mis);
 
-    std::vector<double> z_currt;
-    std::vector<double> z_curr;  // All z sampled times in one single vector
     int cnt = 0;
     for (auto& j : z_currs) {
         arma::vec t_mis1(2);
@@ -250,7 +281,6 @@ std::vector<std::vector<double>> simulateMissingTimes(const std::vector<double>&
         arma::vec z_curr1 = simulate_temporal(mu_curr, alpha_curr, beta_curr, t_mis1, times);
         j = arma::conv_to<std::vector<double>>::from(z_curr1);
 
-        z_curr.insert(z_curr.end(), j.begin(), j.end());
         cnt++;
     }
 

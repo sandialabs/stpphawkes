@@ -41,9 +41,10 @@ static double Beta_tk(double t, double b) {
 }
 
 static double alpha_k(double x, double y, double sig) {
+    // sig is the variance by package convention (see gamma_k in model_likelihood.cpp), so the
+    // bivariate kernel is 1/(2*pi*sig) * exp(-(x^2+y^2)/(2*sig)), not sig-as-standard-deviation.
     double out;
-    out = 1 / sqrt(2 * M_PI * pow(sig, 2)) * exp(-pow(x, 2) / (2 * pow(sig, 2))) * 1 / sqrt(2 * M_PI * pow(sig, 2)) *
-          exp(-pow(y, 2) / (2 * pow(sig, 2)));
+    out = 1 / (2 * M_PI * sig) * exp(-(x * x + y * y) / (2 * sig));
     return (out);
 }
 

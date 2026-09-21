@@ -66,6 +66,9 @@ inline int findMinimumRelevantTime(const std::vector<double>& t, const double ep
 inline std::vector<int> findMinimumRelevantTimes(const std::vector<double>& t, const double epsilon) {
     int n = t.size();
     std::vector<int> min_is(n);
+    if (n == 0) {
+        return min_is;
+    }
     min_is[0] = 0;
 
     for (int i = 1; i < n; ++i) {

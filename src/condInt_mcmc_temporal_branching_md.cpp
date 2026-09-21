@@ -157,16 +157,15 @@ std::tuple<arma::vec, arma::vec, arma::vec, arma::vec> test_method(
     double alpha_curr = alpha_init;
     double beta_curr = beta_init;
 
-    std::vector<double> t;
+    // The observed times are the history the first set of missing times is drawn against, so t
+    // has to hold them before the initialisation loop below, not only from the mcmc loop on.
+    std::vector<double> t = ti;
     arma::vec ts = arma::conv_to<arma::vec>::from(t);
-
-    // Save ti to dataset
-    arma::vec ti_data = arma::conv_to<arma::vec>::from(ti);
 
     int n_mis = t_mis.n_rows;
     std::vector<std::vector<double>> z_currs;
     z_currs.resize(n_mis);
-    static std::vector<double> z_currt;
+    std::vector<double> z_currt;
 
     std::vector<double> z_curr;  // All z sampled times in one single vector
     int cnt = 0;
@@ -185,7 +184,6 @@ std::tuple<arma::vec, arma::vec, arma::vec, arma::vec> test_method(
     std::vector<double> alpha_param = alpha_parami;
     std::vector<double> beta_param = beta_parami;
     double sig_beta = sig_betai;
-    t = ti;
     arma::vec mu_samps(n_mcmc);
     arma::vec alpha_samps(n_mcmc);
     arma::vec beta_samps(n_mcmc);
@@ -239,12 +237,11 @@ List condInt_mcmc_temporal_branching_md(std::vector<double> ti, arma::mat t_misi
                                              double beta_init, std::vector<double> mu_parami,
                                              std::vector<double> alpha_parami, std::vector<double> beta_parami,
                                              double sig_betai, int n_mcmc, int n_burn, bool print) {
+    SeedRngFromR();  // draw the C++ generator seed from R's RNG so set.seed() is honoured
+
     if (t_maxi < 0) {
         stop("t_max must be larger than 0");
     }
-
-    // Save ti to dataset
-    // arma::vec ti_data = arma::vonc_to<arma::vec>::from(ti);
 
     // initialize parameters
     double t_max = t_maxi;
@@ -254,12 +251,11 @@ List condInt_mcmc_temporal_branching_md(std::vector<double> ti, arma::mat t_misi
     double alpha_curr = alpha_init;
     double beta_curr = beta_init;
 
-    std::vector<double> t;
+    // The observed times are the history the first set of missing times is drawn against, so t
+    // has to hold them before the initialisation loop below, not only from the mcmc loop on.
+    std::vector<double> t = ti;
 
     arma::vec ts = arma::conv_to<arma::vec>::from(t);
-
-    // Save ti to dataset
-    arma::vec ti_data = arma::conv_to<arma::vec>::from(ti);
 
     int n_mis = t_mis.n_rows;
     std::vector<std::vector<double>> z_currs;
@@ -283,7 +279,6 @@ List condInt_mcmc_temporal_branching_md(std::vector<double> ti, arma::mat t_misi
     std::vector<double> alpha_param = alpha_parami;
     std::vector<double> beta_param = beta_parami;
     double sig_beta = sig_betai;
-    t = ti;
     arma::vec mu_samps(n_mcmc);
     arma::vec alpha_samps(n_mcmc);
     arma::vec beta_samps(n_mcmc);

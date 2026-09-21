@@ -92,9 +92,7 @@ homog.SPPP <- function(mu, poly, checkpoly=T, showplot=T){
 
 homog.PPP <- function(mu, t.region=c(0,1), seed=NULL){
 
-  if (is.null(seed))
-    seed <- .Random.seed
-  else
+  if (!is.null(seed))
     set.seed(seed)
 
   t.region <- sort(t.region)

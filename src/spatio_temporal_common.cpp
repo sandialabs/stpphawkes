@@ -13,9 +13,8 @@ double sample_a_accumulate(const std::vector<double>& t, double t_max, double b_
     // = n - sum exp(-beta*(t_max - t_i));
     // When exp(-beta*(t_max - t_i)) <= 1e-16, this is no longer relevant
     // This is equivalent to when t_max - t_i <= ln(1e-16)/beta = 36/beta;
-    double epsilon = t_max - 36.0 / b_curr;
-    // int min_relevant_time = findMinimumRelevantTime(t, epsilon);
-    // for (size_t i = min_relevant_time; i < n; ++i) {
+    // Truncating this sum at findMinimumRelevantTime(t, t_max - 36.0 / b_curr) was tried; the
+    // full sum is kept because the saving did not pay for the approximation.
     for (size_t i = 0; i < n; ++i) {
         Ba -= std::exp(-b_curr * (t_max - t[i]));
     }
@@ -60,16 +59,16 @@ std::vector<int> sample_y(const std::vector<double>& t, const std::vector<double
     std::vector<int> y_curr;
     int n = t.size();
     y_curr.resize(n);
+    if (n == 0) {
+        return y_curr;
+    }
     y_curr[0] = 0;
     double W = areapl(poly);
     // Reserve one stream per loop iteration up front, so the parallel loop below is
     // reproducible regardless of how iterations are scheduled across threads.
     const std::uint64_t stream_base = (RngStreamCounter() += static_cast<std::uint64_t>(n)) - n;
-    // Find minimum relevant times
-
-    double epsilon = 36.0 / b_curr;
-    // const std::vector<int> min_relevant_times = findMinimumRelevantTimes(t,
-    // epsilon);
+    // Truncating the inner sums at findMinimumRelevantTimes(t, 36.0 / b_curr) was tried; the
+    // full sums are kept because the saving did not pay for the approximation.
 
     const double scale_factor = a_curr * b_curr * 1.0 / (2 * M_PI * sig_curr);
     const double one_over_two_sig = 1.0 / (2 * sig_curr);
@@ -114,11 +113,10 @@ double b_posterior(const std::vector<double>& t, double t_max, double a, double 
     }
     size_t n = t.size();
 
-    double epsilon = t_max - 38 / b;
-    // int min_relevant_time = findMinimumRelevantTime(t, epsilon);
+    // Truncating this sum at findMinimumRelevantTime(t, t_max - 38 / b) was tried; the full sum
+    // is kept because the saving did not pay for the approximation.
 
     double loglik = 0;
-    // for (size_t i = min_relevant_time; i < n; ++i) {
     for (size_t i = 0; i < n; ++i) {
         // ORIGINAL loglik -= a * Beta_tk(t_max - t[i], b);
         // loglik -=  Beta_tk(t_max - t[i], b);
@@ -154,7 +152,9 @@ double sig_posterior(double sig, const std::vector<double>& z_x, const std::vect
 
     loglik += z_x.size() * std::log(1 / (2 * M_PI * sig));
 
-    loglik += (-sig_param[0] - 1) * std::log(sig) - sig / sig_param[1];  // input params are shape+rate of gamma,
+    // log density of sig ~ InvGamma(shape = sig_param[0], scale = sig_param[1]) up to a constant.
+    // Matches the conjugate update in sample_sig_gibbs below.
+    loglik += (-sig_param[0] - 1) * std::log(sig) - sig_param[1] / sig;  // input params are shape+rate of gamma,
                                                                          // inverse-gamma=1/gamma
     return loglik;
 }
@@ -207,8 +207,8 @@ double log_lik(std::vector<double>& x, std::vector<double>& y, std::vector<doubl
     double mu_str = mu / W;
     double part1 = std::log(mu_str);
 
-    double epsilon = 36.0 / b;
-    // std::vector<int> min_relevant_times = findMinimumRelevantTimes(t, epsilon);
+    // Truncating the inner sums at findMinimumRelevantTimes(t, 36.0 / b) was tried; the full
+    // sums are kept because the saving did not pay for the approximation.
 
     const double scale_factor = a * b / (2 * sig * M_PI);
     const double one_over_two_sig = 1.0 / (2 * sig);

@@ -6,7 +6,7 @@
 #' @param y - vector of y positions
 #' @param poly - matrix defining polygon (\eqn{N} x \eqn{2})
 #' @return A list containing the x and y coordinates of the points inside the polygon
-#'  @export
+#' @export
 pip <- function(x, y, poly){
   inoutv = inout(x, y, poly, T)
   x1 = x[inoutv]
